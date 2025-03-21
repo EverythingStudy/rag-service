@@ -5,53 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../bd.java.sft.business" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../bd.java.sft.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../bd.java.sft.sys" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../eep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/config/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/config/DynamicKeyResolverConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/config/RedisRateLimiterConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/controller/TestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/filter/AuthFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/filter/RequestFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/java/com/example/gateway/utils/JwtUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/src/main/resources/bootstrap.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../iscar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../microcosm" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/function/src/main/java/cn/project/base/function/config/FunctionTools.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/function/src/main/java/cn/project/base/function/controller/FunctionCallController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/AIModeration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/ChatController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/HelloAI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/StramAi.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/config/RagConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/controller/RagController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/RagService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-service/src/main/java/cn/project/base/ragservice/controller/TestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-service/src/main/java/cn/project/base/ragservice/service/InitService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-service/src/main/resources/logback-dev.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag-service/src/main/resources/笑话.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-model/src/main/java/cn/project/base/springaimodel/controller/ChatClientController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-model/src/main/java/cn/project/base/springaimodel/controller/ImageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-model/src/main/java/cn/project/base/springaimodel/controller/TTSController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-model/src/main/java/cn/project/base/springaimodel/domain/Template.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-service/src/main/java/cn/project/base/springaiservice/controller/DeepSeekClientController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/spring-ai-service/src/main/java/cn/project/base/springaiservice/controller/OllamaChatModelController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/config/FeignConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/controller/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/interceptor/RequestInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/service/OpenFeignClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/service/Rag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/service/RagService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/util/ClaimSample.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/util/IscarSignJwtProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/java/cn/project/base/service1/util/JwtHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../service1/src/main/resources/bootstrap.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../test/untitled/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/Customer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +23,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitLabMergeRequestFiltersHistory">{
   &quot;lastFilter&quot;: {
@@ -158,10 +114,10 @@
     "Spring Boot.RagServiceApplication.executor": "Run",
     "Spring Boot.SpringAiModelApplication.executor": "Run",
     "Spring Boot.SpringAiServiceApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/workspace/bd.java.gttms.toxc",
+    "last_opened_file_path": "D:/work/rag-service",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -192,7 +148,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.RagMiluvsApplication">
+  <component name="RunManager" selected="Spring Boot.LangchainAiApplication">
     <configuration name="AIModeration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.project.base.langchainai.controller.AIModeration" />
       <module name="langchain-ai" />
@@ -321,6 +277,7 @@
       <workItem from="1742377579620" duration="1967000" />
       <workItem from="1742437548720" duration="6852000" />
       <workItem from="1742462954812" duration="10922000" />
+      <workItem from="1742539093939" duration="85000" />
     </task>
     <servers />
   </component>

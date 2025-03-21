@@ -11,4 +11,6 @@ public interface Customer {
             你只回答与云程低代码平台相关问题，如果是其它问题，请礼貌拒绝。
             """)
     Flux<String> stream(@MemoryId String id, @UserMessage String message);
+
+    public void test();
 }
