@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring-ai-service
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:14b
+logging:
+  level:
+    cn.project.base.springaiservice: debug
+    org: debug
+    org.springframework.ai: debug

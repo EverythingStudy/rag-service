@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 定义日志格式 -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} [%X{trace_id}] [%15.15t] %-40.40logger{40}[%03L]: %m%n"/>
+    <!-- 日志文件命名规则 -->
+    <property name="FILE_NAME_DATE_PATTERN" value="yyyy-MM-dd"/>
+    <property name="LOG_FILE_BASE_PATH" value="/home/staitech/log"/>
+    <property name="ERROR_LOG_FILE_NAME_PREFIX" value="ErrorLog"/>
+    <property name="WARN_LOG_FILE_NAME_PREFIX" value="WarnLog"/>
+    <property name="INFO_LOG_FILE_NAME_PREFIX" value="InfoLog"/>
+    <property name="DEBUG_LOG_FILE_NAME_PREFIX" value="DebugLog"/>
+    <property name="TRACE_LOG_FILE_NAME_PREFIX" value="TraceLog"/>
+    <property name="ALL_LOG_FILE_NAME_PREFIX" value="AllLog"/>
+    <property name="LOG_FILE_API" value="api"/><!-- 只包含文件名，不包含路径 -->
+
+    <!-- 控制台输出日志配置 -->
+    <appender name="LOG_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern><!-- 使用定义的日志格式 -->
+            <charset>UTF-8</charset><!-- 设置字符集为UTF-8 -->
+        </encoder>
+    </appender>
+
+    <!-- 错误级别日志文件配置 -->
+    <appender name="LOG_ERROR_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${ERROR_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_FILE_BASE_PATH}/${ERROR_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN:-yyyy-MM-dd}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="LOG_WARN_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${WARN_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_BASE_PATH}/${WARN_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="LOG_INFO_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${INFO_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_BASE_PATH}/${INFO_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="LOG_DEBUG_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${DEBUG_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_FILE_BASE_PATH}/${DEBUG_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大100MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="LOG_TRACE_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${TRACE_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_BASE_PATH}/${TRACE_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch><!-- 匹配时记录日志 -->
+            <onMismatch>DENY</onMismatch> <!-- 不匹配时丢弃日志 -->
+        </filter>
+    </appender>
+
+    <appender name="LOG_ALL_FIXED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${ALL_LOG_FILE_NAME_PREFIX}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_BASE_PATH}/${ALL_LOG_FILE_NAME_PREFIX}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>All</level><!-- 记录所有级别的日志 -->
+        </filter>
+    </appender>
+    <!-- http 请求日志文件 -->
+    <appender name="API-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE_BASE_PATH}/${LOG_FILE_API}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE_BASE_PATH}/${LOG_FILE_API}.%d{${FILE_NAME_DATE_PATTERN}}_%i.zip
+            </fileNamePattern>
+            <!-- 单个日志文件最大1MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留最近90个归档 -->
+            <maxHistory>90</maxHistory>
+            <!-- 可选：总大小限制 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 根日志记录器配置 -->
+    <root level="DEBUG">
+        <appender-ref ref="LOG_CONSOLE"/>
+        <appender-ref ref="LOG_ERROR_FIXED_FILE"/>
+        <appender-ref ref="LOG_WARN_FIXED_FILE"/>
+        <appender-ref ref="LOG_DEBUG_FIXED_FILE"/>
+        <appender-ref ref="LOG_ALL_FIXED_FILE"/>
+    </root>
+
+    <!-- 特定包的日志记录器配置 -->
+    <logger name="cn.staitech.aitd.business.config.LogFilter" level="INFO" additivity="false">
+        <appender-ref ref="LOG_CONSOLE"/>
+        <appender-ref ref="API-FILE"/><!-- 针对API请求的日志 -->
+    </logger>
+    <!-- 禁用某些包的日志输出 -->
+    <logger name="org.apache.tomcat" level="OFF"/>
+    <logger name="springfox.documentation" level="OFF"/>
+    <!-- 开启Spring框架的日志输出 -->
+    <logger name="org.springframework" level="ON"/>
+</configuration>

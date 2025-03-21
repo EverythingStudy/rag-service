@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: rag-service
+logging:
+  config: classpath:logback-dev.xml
+  level:
+    mybatis: DEBUG
+

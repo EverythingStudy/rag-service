@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: rag-miluvs
+server:
+  port: 8099
+
+milvus:
+  host: 192.168.3.17
+  port: 19530
+
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        model-name: qwen-plus
+        api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
+      streaming-chat-model:
+        model-name: qwen-plus
+        api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
+      embedding-model:
+        api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
+        model-name: text-embedding-v2
+

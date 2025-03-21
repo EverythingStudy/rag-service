@@ -1,0 +1,13 @@
+server:
+  port: 8080
+##??ds??????????
+spring:
+  application:
+    name: function
+  ai:
+    dashscope:
+      api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
+      chat:
+        options:
+          model: qwen-plus #deepseek-v3?qwen-plus
+
