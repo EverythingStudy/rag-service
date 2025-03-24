@@ -13,6 +13,8 @@
         <option value="$PROJECT_DIR$/langchain-ai/pom.xml" />
         <option value="$PROJECT_DIR$/function/pom.xml" />
         <option value="$PROJECT_DIR$/rag-miluvs/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-admin-service/pom.xml" />
+        <option value="$PROJECT_DIR$/spring-admin-client/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
