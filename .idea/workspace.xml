@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="github init">
-      <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="git add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-ai-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-admin-client/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-client/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-admin-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +117,8 @@
     "Spring Boot.LangchainAiApplication.executor": "Run",
     "Spring Boot.RagMiluvsApplication.executor": "Run",
     "Spring Boot.RagServiceApplication.executor": "Run",
+    "Spring Boot.SpringAdminClientApplication.executor": "Run",
+    "Spring Boot.SpringAdminServiceApplication.executor": "Run",
     "Spring Boot.SpringAiModelApplication.executor": "Run",
     "Spring Boot.SpringAiServiceApplication.executor": "Run",
     "git-widget-placeholder": "master",
@@ -155,7 +155,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.LangchainAiApplication">
+  <component name="RunManager" selected="Spring Boot.SpringAdminClientApplication">
     <configuration name="AIModeration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.project.base.langchainai.controller.AIModeration" />
       <module name="langchain-ai" />
@@ -434,7 +434,7 @@
       <workItem from="1742462954812" duration="10922000" />
       <workItem from="1742539093939" duration="2411000" />
       <workItem from="1742801607070" duration="1213000" />
-      <workItem from="1742806272198" duration="375000" />
+      <workItem from="1742806272198" duration="1960000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -444,7 +444,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742539231974</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="git add">
+      <option name="closed" value="true" />
+      <created>1742806774136</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1742806774136</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -495,6 +503,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="github init" />
-    <option name="LAST_COMMIT_MESSAGE" value="github init" />
+    <MESSAGE value="git add" />
+    <option name="LAST_COMMIT_MESSAGE" value="git add" />
   </component>
 </project>
