@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="git add">
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin client">
+      <change afterPath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-client/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-client/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-admin-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +51,6 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="alwaysUpdateSnapshots" value="true" />
         <option name="localRepository" value="D:\maven" />
         <option name="mavenHome" value="Use Maven wrapper" />
         <option name="useMavenConfig" value="false" />
@@ -98,6 +97,8 @@
     "Maven.service [package].executor": "Run",
     "Maven.service [verify].executor": "Run",
     "Maven.spring-admin-service [clean].executor": "Run",
+    "Maven.spring-admin-service [compile].executor": "Run",
+    "Maven.spring-admin-service [package].executor": "Run",
     "Maven.spring-ai-model [clean].executor": "Run",
     "Maven.spring-ai-model [compile].executor": "Run",
     "Maven.spring-ai-model [install].executor": "Run",
@@ -155,7 +156,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SpringAdminClientApplication">
+  <component name="RunManager" selected="Spring Boot.SpringAdminServiceApplication">
     <configuration name="AIModeration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.project.base.langchainai.controller.AIModeration" />
       <module name="langchain-ai" />
@@ -434,7 +435,7 @@
       <workItem from="1742462954812" duration="10922000" />
       <workItem from="1742539093939" duration="2411000" />
       <workItem from="1742801607070" duration="1213000" />
-      <workItem from="1742806272198" duration="1960000" />
+      <workItem from="1742806272198" duration="3409000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -452,7 +453,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742806774136</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="spring admin client">
+      <option name="closed" value="true" />
+      <created>1742808351588</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1742808351588</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -504,6 +513,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="github init" />
     <MESSAGE value="git add" />
-    <option name="LAST_COMMIT_MESSAGE" value="git add" />
+    <MESSAGE value="spring admin client" />
+    <option name="LAST_COMMIT_MESSAGE" value="spring admin client" />
   </component>
 </project>
