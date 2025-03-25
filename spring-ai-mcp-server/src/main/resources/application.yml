@@ -9,3 +9,5 @@ spring:
         version: 0.0.1            # ??????
   application:
     name: spring-ai-mcp-server
+  main:
+    banner-mode: off
