@@ -1,0 +1,17 @@
+
+spring:
+  application:
+    name: spring-ai-mcp
+  main:
+    web-application-type: none
+  ai:
+    dashscope:
+      api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
+    mcp:
+      client:
+        sse:
+          connections:
+            server1:
+              url: http://localhost:8080
+server:
+  port: 8888

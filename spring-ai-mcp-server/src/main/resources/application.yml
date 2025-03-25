@@ -1,0 +1,11 @@
+server:
+  port: 8080  # ???????
+
+spring:
+  ai:
+    mcp:
+      server:
+        name: my-weather-server    # MCP?????
+        version: 0.0.1            # ??????
+  application:
+    name: spring-ai-mcp-server

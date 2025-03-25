@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin server">
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin server Security">
+      <change afterPath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/OpenMeteoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +100,12 @@
     "Maven.spring-admin-service [clean].executor": "Run",
     "Maven.spring-admin-service [compile].executor": "Run",
     "Maven.spring-admin-service [package].executor": "Run",
+    "Maven.spring-ai-mcp-client [clean].executor": "Run",
+    "Maven.spring-ai-mcp-client [compile].executor": "Run",
+    "Maven.spring-ai-mcp-client [validate].executor": "Run",
+    "Maven.spring-ai-mcp-server [clean].executor": "Run",
+    "Maven.spring-ai-mcp-server [compile].executor": "Run",
+    "Maven.spring-ai-mcp-server [validate].executor": "Run",
     "Maven.spring-ai-model [clean].executor": "Run",
     "Maven.spring-ai-model [compile].executor": "Run",
     "Maven.spring-ai-model [install].executor": "Run",
@@ -119,12 +127,14 @@
     "Spring Boot.RagServiceApplication.executor": "Run",
     "Spring Boot.SpringAdminClientApplication.executor": "Run",
     "Spring Boot.SpringAdminServiceApplication.executor": "Run",
+    "Spring Boot.SpringAiMcpApplication.executor": "Debug",
+    "Spring Boot.SpringAiMcpServerApplication.executor": "Debug",
     "Spring Boot.SpringAiModelApplication.executor": "Run",
     "Spring Boot.SpringAiServiceApplication.executor": "Run",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/work/rag-service",
+    "last_opened_file_path": "D:/work/spring-ai-alibaba-examples",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -134,7 +144,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "MavenSettings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -155,7 +165,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SpringAdminServiceApplication">
+  <component name="RunManager" selected="Spring Boot.SpringAiMcpApplication">
     <configuration name="AIModeration" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.project.base.langchainai.controller.AIModeration" />
       <module name="langchain-ai" />
@@ -342,6 +352,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SpringAiMcpApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="spring-ai-mcp-client" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="cn.project.base.springaimcp.SpringAiMcpApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SpringAiMcpServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="spring-ai-mcp-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="cn.project.base.springaimcpserver.SpringAiMcpServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SpringAiModelApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="spring-ai-model" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="cn.project.base.springaimodel.SpringAiModelApplication" />
@@ -434,7 +458,7 @@
       <workItem from="1742462954812" duration="10922000" />
       <workItem from="1742539093939" duration="2411000" />
       <workItem from="1742801607070" duration="1213000" />
-      <workItem from="1742806272198" duration="7557000" />
+      <workItem from="1742806272198" duration="19763000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -468,7 +492,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742809752095</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="spring admin server Security">
+      <option name="closed" value="true" />
+      <created>1742867675294</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1742867675294</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -522,6 +554,18 @@
     <MESSAGE value="git add" />
     <MESSAGE value="spring admin client" />
     <MESSAGE value="spring admin server" />
-    <option name="LAST_COMMIT_MESSAGE" value="spring admin server" />
+    <MESSAGE value="spring admin server Security" />
+    <option name="LAST_COMMIT_MESSAGE" value="spring admin server Security" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../maven/org/springframework/ai/spring-ai-mcp-client-spring-boot-autoconfigure/1.0.0-M6/spring-ai-mcp-client-spring-boot-autoconfigure-1.0.0-M6-sources.jar!/org/springframework/ai/autoconfigure/mcp/client/McpClientAutoConfiguration.java</url>
+          <line>181</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
