@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin client">
-      <change afterPath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" afterDir="false" />
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin server">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/src/main/java/cn/project/base/springadminservice/config/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +134,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "MavenSettings",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -435,7 +434,7 @@
       <workItem from="1742462954812" duration="10922000" />
       <workItem from="1742539093939" duration="2411000" />
       <workItem from="1742801607070" duration="1213000" />
-      <workItem from="1742806272198" duration="3409000" />
+      <workItem from="1742806272198" duration="7557000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -461,7 +460,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742808351588</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="spring admin server">
+      <option name="closed" value="true" />
+      <created>1742809752095</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1742809752095</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -514,6 +521,7 @@
     <MESSAGE value="github init" />
     <MESSAGE value="git add" />
     <MESSAGE value="spring admin client" />
-    <option name="LAST_COMMIT_MESSAGE" value="spring admin client" />
+    <MESSAGE value="spring admin server" />
+    <option name="LAST_COMMIT_MESSAGE" value="spring admin server" />
   </component>
 </project>
