@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class SpringAiMcpServerApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(SpringAiMcpServerApplication.class, args);
     }
