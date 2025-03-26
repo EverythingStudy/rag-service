@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring admin server Security">
-      <change afterPath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/OpenMeteoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring ai mcp">
+      <change afterPath="$PROJECT_DIR$/spring-ai-mcp/src/main/java/cn/project/base/springaimcp/controller/McpClent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$" beforeDir="false" afterPath="$PROJECT_DIR$" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp-server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/OpenMeteoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/OpenMeteoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/SpringAiMcpServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/SpringAiMcpServerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring-ai-mcp/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +57,7 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
+        <option name="alwaysUpdateSnapshots" value="true" />
         <option name="localRepository" value="D:\maven" />
         <option name="mavenHome" value="Use Maven wrapper" />
         <option name="useMavenConfig" value="false" />
@@ -134,7 +140,7 @@
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "21",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/work/spring-ai-alibaba-examples",
+    "last_opened_file_path": "D:/workspace/be.pat.pacmvs.java.fr",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -458,7 +464,8 @@
       <workItem from="1742462954812" duration="10922000" />
       <workItem from="1742539093939" duration="2411000" />
       <workItem from="1742801607070" duration="1213000" />
-      <workItem from="1742806272198" duration="19763000" />
+      <workItem from="1742806272198" duration="36209000" />
+      <workItem from="1742973805059" duration="1660000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -500,7 +507,23 @@
       <option name="project" value="LOCAL" />
       <updated>1742867675294</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="spring ai mcp">
+      <option name="closed" value="true" />
+      <created>1742896070875</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1742896070875</updated>
+    </task>
+    <task id="LOCAL-00007" summary="spring ai mcp">
+      <option name="closed" value="true" />
+      <created>1742896895623</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1742896895623</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,7 +578,8 @@
     <MESSAGE value="spring admin client" />
     <MESSAGE value="spring admin server" />
     <MESSAGE value="spring admin server Security" />
-    <option name="LAST_COMMIT_MESSAGE" value="spring admin server Security" />
+    <MESSAGE value="spring ai mcp" />
+    <option name="LAST_COMMIT_MESSAGE" value="spring ai mcp" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -565,7 +589,47 @@
           <line>181</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../maven/org/springframework/ai/spring-ai-mcp/1.0.0-M6/spring-ai-mcp-1.0.0-M6.jar!/org/springframework/ai/mcp/SyncMcpToolCallbackProvider.class</url>
+          <line>27</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/spring-ai-mcp/src/main/java/cn/project/base/springaimcp/SpringAiMcpApplication.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../maven/org/springframework/ai/spring-ai-mcp/1.0.0-M6/spring-ai-mcp-1.0.0-M6.jar!/org/springframework/ai/mcp/SyncMcpToolCallbackProvider.class</url>
+          <line>19</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/spring-ai-mcp/src/main/java/cn/project/base/springaimcp/SpringAiMcpApplication.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/spring-ai-mcp-server/src/main/java/cn/project/base/springaimcpserver/SpringAiMcpServerApplication.java</url>
+          <line>17</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>jar://$PROJECT_DIR$/../../maven/org/springframework/ai/spring-ai-core/1.0.0-M6/spring-ai-core-1.0.0-M6.jar!/org/springframework/ai/tool/method/MethodToolCallbackProvider.class</url>
+          <line>84</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/spring-ai-mcp/src/main/java/cn/project/base/springaimcp/SpringAiMcpApplication.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="org.springframework.beans.factory.support.DefaultListableBeanFactory" memberName="factoryBeanObjectCache" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

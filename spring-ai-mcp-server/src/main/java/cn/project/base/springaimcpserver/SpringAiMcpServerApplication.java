@@ -5,7 +5,6 @@ import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootApplication
 public class SpringAiMcpServerApplication {
@@ -13,6 +12,7 @@ public class SpringAiMcpServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringAiMcpServerApplication.class, args);
     }
+
     @Bean
     public ToolCallbackProvider weatherTools(OpenMeteoService openMeteoService) {
         return MethodToolCallbackProvider.builder()
@@ -20,8 +20,8 @@ public class SpringAiMcpServerApplication {
                 .build();
     }
 
-    @Bean
-    public WebClient.Builder webClientBuilder() {
-        return WebClient.builder();
-    }
+//    @Bean
+//    public WebClient.Builder webClientBuilder() {
+//        return WebClient.builder();
+//    }
 }

@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: spring-ai-mcp
@@ -9,12 +8,23 @@ spring:
       api-key: sk-7d8637e8c1b34e7aa901dade275a1c7b
     mcp:
       client:
+        enabled: true
+        name: my-mcp-client
+        version: 1.0.0
+        request-timeout: 30s
+        type: ASYNC  # or ASYNC for reactive applications
         sse:
           connections:
             server1:
-              url: http://localhost:8080
+              url: http://localhost:8081
+    mandatory-file-encoding: UTF-8
 server:
   port: 8888
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 # ????
 logging:
   level:
