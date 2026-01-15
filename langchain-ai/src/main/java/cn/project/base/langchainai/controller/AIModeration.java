@@ -11,7 +11,7 @@ import dev.langchain4j.model.output.Response;
 public class AIModeration {
     //ModerationModel能够校验输入中是否存在敏感内容。
     public static void main(String[] args) {
-        ModerationModel moderationModel = OpenAiModerationModel.withApiKey("demo");
+        ModerationModel moderationModel = OpenAiModerationModel.builder().apiKey("demo").build();
         Response<Moderation> response = moderationModel.moderate("你好");
         System.out.println(response.content().flaggedText());
 

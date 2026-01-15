@@ -8,11 +8,11 @@ import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.input.Prompt;
 import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
@@ -27,9 +27,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Slf4j
@@ -50,7 +48,7 @@ public class InitService {
         // 4.基于正则的：按照自定义正则表达式分隔 DocumentByRegexSplitter
         // 5.基于句子的（使用Apache OpenNLP，只支持英文，所以可以忽略）DocumentBySentenceSplitter
         // 6.基于字的：将文本按照空白字符分割 DocumentByWordSplitter
-        DocumentByLineSplitter lineSplitter = new DocumentByLineSplitter(200, 0, new OpenAiTokenizer());
+        DocumentByLineSplitter lineSplitter = new DocumentByLineSplitter(200, 0);
         //DocumentSplitter splitter = DocumentSplitters.recursive(150,10,new OpenAiTokenizer());
         List<TextSegment> segments = lineSplitter.split(document);
         log.info("segment的数量是: {}", segments.size());
@@ -104,8 +102,9 @@ public class InitService {
                 .build();
 
         UserMessage userMessage = prompt.toUserMessage();
-        Response<AiMessage> aiMessageResponse = ollamaChatModel.generate(userMessage);
-        AiMessage response = aiMessageResponse.content();
+
+        ChatResponse aiMessageResponse = ollamaChatModel.chat(Collections.singletonList(userMessage));
+        AiMessage response = aiMessageResponse.aiMessage();
         log.info("大模型回答: {}", response.text());
     }
 

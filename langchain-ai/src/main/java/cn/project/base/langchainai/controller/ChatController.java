@@ -1,8 +1,7 @@
 package cn.project.base.langchainai.controller;
 
 import dev.langchain4j.community.model.dashscope.QwenChatModel;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ChatController {
 
-    ChatLanguageModel chatLanguageModel;
+    ChatModel chatLanguageModel;
 
-    ChatController(ChatLanguageModel chatLanguageModel) {
+    ChatController(ChatModel chatLanguageModel) {
         this.chatLanguageModel = chatLanguageModel;
     }
 
@@ -22,7 +21,7 @@ public class ChatController {
     }
 
     public static void main(String[] args) {
-        ChatLanguageModel model = QwenChatModel.builder()
+        ChatModel model = QwenChatModel.builder()
                 .apiKey("sk-7d8637e8c1b34e7aa901dade275a1c7b")
                 .modelName("qwen-plus")
                 //以下的参数，根据具体业务需求设置

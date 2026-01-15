@@ -8,8 +8,10 @@ import dev.langchain4j.data.document.splitter.DocumentByParagraphSplitter;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
-import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+//import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
+//import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.rag.DefaultRetrievalAugmentor;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
@@ -35,9 +37,9 @@ public class RagService {
     private static final Logger log = LoggerFactory.getLogger(RagService.class);
     private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
     @Resource
-    private StreamingChatLanguageModel streamingChatLanguageModel;
+    private StreamingChatModel streamingChatLanguageModel;
     @Resource
-    private ChatLanguageModel chatLanguageModel;
+    private ChatModel chatLanguageModel;
     @Resource
     private EmbeddingModel embeddingModel;
     @Resource
@@ -61,9 +63,10 @@ public class RagService {
                         .maxMessages(50)
                         .build());
 
-        aiServices.streamingChatLanguageModel(streamingChatLanguageModel);
-        aiServices.chatLanguageModel(chatLanguageModel);
-
+//        aiServices.streamingChatLanguageModel(streamingChatLanguageModel);
+//        aiServices.chatLanguageModel(chatLanguageModel);
+        aiServices.streamingChatModel(streamingChatLanguageModel);
+        aiServices.chatModel(chatLanguageModel);
         // 先进行知识库检索
         ContentRetriever contentRetriever = EmbeddingStoreContentRetriever.builder()
                 .embeddingModel(embeddingModel)

@@ -1,29 +1,38 @@
 package cn.project.base.langchainai.controller;
 
-import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
-
-import java.util.concurrent.TimeUnit;
 
 public class StramAi {
     public static void main(String[] args) {
 
-        StreamingChatLanguageModel model = OpenAiStreamingChatModel.withApiKey("demo");
+        OpenAiStreamingChatModel model = OpenAiStreamingChatModel.builder().apiKey("demo").build();
 
 
-        model.generate("你好，你是谁？", new StreamingResponseHandler<AiMessage>() {
+        model.chat("你好，你是谁？", new StreamingChatResponseHandler() {
+            //            @Override
+//            public void onNext(String token) {
+//
+//                System.out.println(token);
+//
+//                try {
+//                    TimeUnit.SECONDS.sleep(1);
+//                } catch (InterruptedException e) {
+//                    throw new RuntimeException(e);
+//                }
+//
+//            }
+            //PartialThinking thinking = new PartialThinking("");
+
+
             @Override
-            public void onNext(String token) {
+            public void onPartialResponse(String token) {
+                StreamingChatResponseHandler.super.onPartialResponse(token);
+            }
 
-                System.out.println(token);
-
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            @Override
+            public void onCompleteResponse(ChatResponse chatResponse) {
 
             }
 

@@ -3,28 +3,105 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>cn.project.base</groupId>
-    <artifactId>service</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+
+   <groupId>cn.project.base</groupId>
+   <artifactId>service</artifactId>
+   <version>1.0-SNAPSHOT</version>
+   <packaging>pom</packaging>
     <modules>
         <module>rag-service</module>
-        <module>demo</module>
+        <module>function</module>
+        <module>langchain-ai</module>
+        <module>rag-miluvs</module>
         <module>spring-ai-model</module>
         <module>spring-ai-service</module>
+        <module>spring-admin-client</module>
+        <module>spring-admin-service</module>
+        <module>spring-ai-mcp</module>
+        <module>spring-ai-mcp-server</module>
     </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 统一依赖版本管理 -->
+        <spring-boot.version>3.2.0</spring-boot.version>
+        <spring-ai.version>1.0.0-M6</spring-ai.version>
+        <spring-ai-alibaba.version>1.0.0-M5.1</spring-ai-alibaba.version>
+        <spring-boot-admin.version>3.3.4</spring-boot-admin.version>
+        <langchain4j.version>1.9.1-beta17</langchain4j.version>
+        <java.version>21</java.version>
     </properties>
+   <dependencyManagement>
+       <dependencies>
+           <dependency>
+               <groupId>org.springframework.boot</groupId>
+               <artifactId>spring-boot-dependencies</artifactId>
+               <version>${spring-boot.version}</version>
+               <type>pom</type>
+               <scope>import</scope>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j</artifactId>
+               <version>1.9.1</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-core</artifactId>
+               <version>1.9.1</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-open-ai</artifactId>
+               <version>1.9.1</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-embeddings</artifactId>
+               <version>${langchain4j.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-chroma</artifactId>
+               <version>${langchain4j.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-ollama</artifactId>
+               <version>1.9.1</version>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
+               <version>${langchain4j.version}</version>
+               <exclusions>
+                   <exclusion>
+                       <groupId>org.slf4j</groupId>
+                       <artifactId>slf4j-simple</artifactId>
+                   </exclusion>
+               </exclusions>
+           </dependency>
+           <dependency>
+               <groupId>dev.langchain4j</groupId>
+               <artifactId>langchain4j-open-ai-spring-boot-starter</artifactId>
+               <version>${langchain4j.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>com.alibaba.cloud.ai</groupId>
+               <artifactId>spring-ai-alibaba-starter</artifactId>
+               <version>${spring-ai-alibaba.version}</version>
+           </dependency>
+           <dependency>
+               <groupId>org.springframework.ai</groupId>
+               <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
+               <version>${spring-ai.version}</version>
+           </dependency>
+       </dependencies>
+   </dependencyManagement>
+
+
 <!--    <dependencies>-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
@@ -59,4 +136,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+<!--        <repository>-->
+<!--            <id>spring-milestones</id>-->
+<!--            <name>Spring Milestones</name>-->
+<!--            <url>https://repo.spring.io/milestone</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>aliyun maven</name>
+            <url>https://maven.aliyun.com/repository/public/</url>
+        </repository>
+    </repositories>
 </project>

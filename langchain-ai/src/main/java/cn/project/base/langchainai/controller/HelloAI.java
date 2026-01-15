@@ -2,7 +2,8 @@ package cn.project.base.langchainai.controller;
 
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.model.output.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ import java.util.List;
 @RequestMapping(value = "/ai")
 public class HelloAI {
     @Autowired
-    private ChatLanguageModel  model;
+    private ChatModel  model;
     @GetMapping("/chat")
     public String ai(){
         return model.chat("你好啊");
     }
     public static void main(String[] args) {
 
-        ChatLanguageModel model = OpenAiChatModel.builder()
+        ChatModel model = OpenAiChatModel.builder()
                 .baseUrl("http://langchain4j.dev/demo/openai/v1")
                 .apiKey("demo")
                 .build();
@@ -37,14 +38,14 @@ public class HelloAI {
 
  */
         UserMessage userMessage1 = UserMessage.userMessage("你好，我是小齐");
-        Response<AiMessage> response1 = model.generate(userMessage1);
-        AiMessage aiMessage1 = response1.content(); // 大模型的第一次响应
+        ChatResponse response1 = model.chat(userMessage1);
+        AiMessage aiMessage1 = response1.aiMessage(); // 大模型的第一次响应
         System.out.println(aiMessage1.text());
         System.out.println("----");
 
         // 下面一行代码是重点
-        Response<AiMessage> response2 = model.generate(List.of(userMessage1, aiMessage1, UserMessage.userMessage("我叫什么")));
-        AiMessage aiMessage2 = response2.content(); // 大模型的第二次响应
+        ChatResponse response2 = model.chat(List.of(userMessage1, aiMessage1, UserMessage.userMessage("我叫什么")));
+        AiMessage aiMessage2 = response2.aiMessage(); // 大模型的第二次响应
         System.out.println(aiMessage2.text());
 
     }
