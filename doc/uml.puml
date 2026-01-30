@@ -1,0 +1,296 @@
+# UML 与架构图示例合集（PlantUML / 可直接渲染）
+
+以下是一套常见架构汇报中会用到的图示示例（系统架构图、用例图、活动图、序列图、流程图、组件图、类图、部署图、数据流图、KPI 仪表盘原型、高层架构图等）。每个示例都包含：用途说明、可直接复制到 PlantUML 渲染器的代码片段，以及关键建模提示。
+
+---
+
+## 使用说明
+
+1. 推荐渲染器：PlantUML（本地插件、VS Code PlantUML、或在线 PlantUML server）。
+2. 复制每个 `@startuml ... @enduml` 代码块到渲染器即可生成图像。
+3. 需要导出 PNG/SVG 或按公司品牌样式（颜色/字体/注释），告诉我你想要的图我可以根据你的上下文定制。
+
+---
+
+## 1. 系统架构图 / 高层架构图（Component / Context）
+**用途**：向 Stakeholders 展示系统主要边界、外部系统与子系统间的高层关系。
+
+```plantuml
+@startuml
+left to right direction
+skinparam componentStyle rectangle
+actor "External User" as User
+node "Web Client" as Web
+package "Cloud VPC" {
+  [Load Balancer]
+  [API Gateway]
+  package "Microservices" {
+    [Auth Service]
+    [Order Service]
+    [Catalog Service]
+    [Payment Service]
+  }
+  database "Primary DB (Postgres)" as DB
+}
+User --> Web : 使用浏览器
+Web --> [Load Balancer]
+[Load Balancer] --> [API Gateway]
+[API Gateway] --> [Auth Service]
+[API Gateway] --> [Order Service]
+[Order Service] --> [Payment Service]
+[Order Service] --> DB
+[Catalog Service] --> DB
+@enduml
+```
+
+**提示**：高层图应保持简洁，聚焦边界、协议与第三方依赖（例如消息队列、外部支付网关、CDN）。
+
+---
+
+## 2. 用例图（Use Case）
+**用途**：描述用户（角色）与系统功能的交互，适合需求评审与非技术 Stakeholder 汇报。
+
+```plantuml
+@startuml
+left to right direction
+actor Customer
+actor Admin
+rectangle "Online Store" {
+  (Browse Catalog)
+  (Place Order)
+  (Pay)
+  (Track Order)
+  (Manage Products)
+}
+Customer -- (Browse Catalog)
+Customer -- (Place Order)
+Customer -- (Track Order)
+Admin -- (Manage Products)
+(Place Order) .> (Pay) : <<include>>
+@enduml
+```
+
+**提示**：对复杂系统可把用例按子系统分组，或为每个用户旅程绘制单独用例集。
+
+---
+
+## 3. 活动图 / 流程图（Activity / Flow）
+**用途**：展示业务流程或控制流（若/循环、并行、异常处理）。
+
+```plantuml
+@startuml
+start
+:浏览商品;
+if (添加到购物车?) then (是)
+  :更新购物车;
+endif
+:去结算;
+:填写收货信息;
+if (支付成功?) then (是)
+  :生成订单;
+  stop
+else (否)
+  :提示支付失败;
+  stop
+endif
+@enduml
+```
+
+**提示**：用于展示业务规则分支、失败/补偿路径（尤其适合 SRE/运营关注点）。
+
+---
+
+## 4. 序列图（Sequence）
+**用途**：展示跨系统或跨服务的时序交互，常用于设计 API 调用流程或故障路径分析。
+
+```plantuml
+@startuml
+actor Customer
+participant "Web UI" as UI
+participant "API Gateway" as API
+participant "Order Service" as Order
+participant "Payment Service" as Payment
+Customer -> UI : 点击提交订单
+UI -> API : POST /orders
+API -> Order : createOrder(req)
+Order -> Payment : charge(card, amount)
+Payment --> Order : success
+Order --> API : 201 Created
+API --> UI : 201 Created
+UI --> Customer : 显示确认
+@enduml
+```
+
+**提示**：序列图非常适合演示重试、超时、回滚等运行时行为。
+
+---
+
+## 5. 组件图（Component）
+**用途**：展示系统内部组件（库、模块、服务）及它们之间的依赖关系，便于部署/拆分讨论。
+
+```plantuml
+@startuml
+package "Backend" {
+  [API Gateway]
+  [Auth Service]
+  [Order Service]
+  [Catalog Service]
+  [Payment Service]
+}
+[Web UI] --> [API Gateway]
+[API Gateway] --> [Auth Service]
+[API Gateway] --> [Order Service]
+[API Gateway] --> [Catalog Service]
+[Order Service] --> [Payment Service]
+[Order Service] ..> [Message Queue] : emits events
+@enduml
+```
+
+**提示**：组件图适合标注技术栈（语言、框架）、接口（REST/gRPC）、协定（消息格式）。
+
+---
+
+## 6. 类图（Class Diagram）
+**用途**：展示系统内重要数据结构、类、接口与它们的关系（继承、聚合、组合、关联）。
+
+```plantuml
+@startuml
+class User {
+  +id: UUID
+  +name: String
+  +email: String
+  +login()
+}
+class Order {
+  +id: UUID
+  +createdAt: DateTime
+  +total: Decimal
+  +calculateTotal()
+}
+class OrderItem {
+  +productId: UUID
+  +quantity: int
+  +price: Decimal
+}
+User "1" -- "0..*" Order : places >
+Order "1" *-- "0..*" OrderItem
+@enduml
+```
+
+**提示**：对于领域驱动设计（DDD）项目，把实体/聚合根/值对象分层展示会很有帮助。
+
+---
+
+## 7. 部署图（Deployment Diagram）
+**用途**：物理部署视图，展示运行时节点（容器、虚拟机、物理机、云资源）与实例关系。
+
+```plantuml
+@startuml
+node "AWS VPC" {
+  node "Public Subnet" {
+    node "ALB" as LB
+  }
+  node "Private Subnet" {
+    node "ECS Cluster" as ECS {
+      [API Service]
+      [Worker]
+    }
+    database "RDS (Postgres)" as DB
+  }
+}
+LB --> [API Service]
+[API Service] --> DB
+[Worker] --> DB
+@enduml
+```
+
+**提示**：部署图应标注可用区（AZ）、网络隔离（subnet、security group）与存储类型（S3、EBS、RDS）。
+
+---
+
+## 8. 数据流图（DFD）
+**用途**：说明数据在系统中的流向、处理节点、存储点与外部实体（更偏业务/数据视角）。
+
+```plantuml
+@startuml
+left to right direction
+actor Customer
+entity "Web Application" as Web
+entity "Order Processor" as OP
+database "Orders DB" as DB
+actor "Payment Gateway" as PG
+Customer -> Web : submit order
+Web -> PG : request payment
+PG --> Web : payment result
+Web -> OP : enqueue order
+OP -> DB : persist order
+@enduml
+```
+
+**提示**：DFD 在合规/隐私审查时非常有用（标注 PII、加密/脱敏点）。
+
+---
+
+## 9. 流程图（可用于运维 runbook）
+**用途**：运维/故障排查步骤的线性流程（例如回滚流程、数据库迁移步骤）。
+
+```plantuml
+@startuml
+start
+:检测故障;
+if (影响范围>阈值?) then (是)
+  :触发紧急响应;
+  :通知值班;
+  fork
+    :开启回滚流程;
+  fork again
+    :收集日志;
+  end fork
+else (否)
+  :监控并记录;
+endif
+stop
+@enduml
+```
+
+**提示**：为每一步写明负责人（RACI）和预估时限能提高流程可执行性。
+
+---
+
+## 10. KPI 仪表盘草图（Dashboard Wireframe）
+**用途**：汇报关键指标（可视化监控、商业KPI、SLA/错误率等）。下面给出一个仪表盘原型的 PlantUML 矩形线框，方便在汇报中直接展示布局思路。
+
+```plantuml
+@startuml
+skinparam dpi 150
+rectangle "KPI 仪表盘 - Overview" {
+  rectangle "[KPI 卡片] 活跃用户\n- 7日\n- 30日" as KPI1
+  rectangle "[KPI 卡片] 日收入\n- 今日 vs 昨日" as KPI2
+  rectangle "趋势图: 日订单数 (时间序列)" as TS
+  rectangle "Top: 错误率 / 响应时间" as SLA
+  rectangle "侧栏: 过滤器\n- 日期范围\n- 服务/区域" as F
+}
+@enduml
+```
+
+**提示**：实际仪表盘请使用 Grafana/Looker/Tableau/Metabase 等工具实现交互与钻取能力；用此线框展示 KPI 选取与可视化布局。
+
+---
+
+## 常见建模建议（速览）
+- 把观众区分为 **技术管理层**（高层架构/部署/可靠性）和 **业务方**（用例/DFD/KPI）；为两类观众准备不同抽象级别的图。
+- 版本化图源（PlantUML 源码）并纳入代码仓库与 PR 流程，便于评审与变更记录。
+- 对每张图在图例中注明约定（协议、重试、认证方式、消息格式、数据加密）。
+- 在架构评审中同时提供 "正常流程" 与 "失败/补偿流程" 的图示，方便讨论 SLO/SLA 边界。
+
+---
+
+## 下一步（你可以告诉我）
+- 需要我把其中某张图按你们系统的实际组件/接口**定制化**（把系统名、API、队列、DB 名称带上）;
+- 或者把某张图**导出为 PNG/SVG/PPT**（请说明目标格式）。
+
+
+---
+
+*文末备注：这些示例以 PlantUML 为主，便于版本管理与审阅。若你偏好 Mermaid、draw.io (diagrams.net) 或 Figma 模板，我也可以直接输出对应格式的源码/导出指引。*
+
