@@ -1,6 +1,14 @@
 package cn.project.base.function.controller;
 
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -11,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/ai")
@@ -37,5 +47,29 @@ public class FunctionCallController {
                 .call()
                 .content();
     }
+    public static void main(String[] args) throws ClientProtocolException, IOException {
+        // 设置 Ollama 的 API 地址（默认为 http://localhost:11434）
+        String ollamaUrl = "http://localhost:11434/api/generate";
 
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost request = new HttpPost(ollamaUrl);
+
+        // 设置请求头
+        request.setHeader("Content-Type", "application/json");
+
+        // 构建请求体（模型名称和输入内容）
+        String jsonBody = "{ \"model\": \"deepseek-r1:14b\", \"prompt\": \"Hello, how are you?\" }";
+        request.setEntity(new StringEntity(jsonBody));
+
+        CloseableHttpResponse response = httpClient.execute(request);
+        int statusCode = response.getStatusLine().getStatusCode();
+        HttpEntity entityResponse = response.getEntity();
+        String responseBody = EntityUtils.toString(entityResponse);
+
+        System.out.println("Status Code: " + statusCode);
+        System.out.println("Response Body: " + responseBody);
+
+        // 关闭客户端
+        httpClient.close();
+    }
 }
