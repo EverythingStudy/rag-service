@@ -4,37 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="spring ai mcp">
-      <change afterPath="$PROJECT_DIR$/.idea/easycode.ignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="ollamaurl">
+      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/function/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/function/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/langchain-ai/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/langchain-ai/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/LangchainAiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/LangchainAiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/ChatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/HelloAI.java" beforeDir="false" afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/HelloAI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/StramAi.java" beforeDir="false" afterPath="$PROJECT_DIR$/langchain-ai/src/main/java/cn/project/base/langchainai/controller/StramAi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag-miluvs/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rag-miluvs/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/RagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rag-miluvs/src/main/java/cn/project/base/ragmiluvs/service/RagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rag-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag-service/src/main/java/cn/project/base/ragservice/service/InitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rag-service/src/main/java/cn/project/base/ragservice/service/InitService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-admin-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-admin-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-ai-mcp-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-ai-mcp/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-mcp/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-ai-model/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-model/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spring-ai-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/spring-ai-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tts/output-stream.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tts/output.mp3" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_D:/github/rag-service" value="2uCwsOEMCrDnRcO3Fi0gXi1yfwS" />
+    </persistenceIdMap>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -105,94 +87,95 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AIModeration.executor": "Run",
-    "Application.ChatController.executor": "Run",
-    "Application.HelloAI.executor": "Run",
-    "Application.StramAi.executor": "Run",
-    "Maven.demo [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor": "Run",
-    "Maven.demo [org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile].executor": "Run",
-    "Maven.demo [org.apache.maven.plugins:maven-install-plugin:3.1.3:help].executor": "Run",
-    "Maven.demo [org.apache.maven.plugins:maven-install-plugin:3.1.3:install].executor": "Run",
-    "Maven.function [clean].executor": "Run",
-    "Maven.function [compile].executor": "Run",
-    "Maven.function [verify].executor": "Run",
-    "Maven.langchain-ai [clean].executor": "Run",
-    "Maven.langchain-ai [compile].executor": "Run",
-    "Maven.langchain-ai [install].executor": "Run",
-    "Maven.langchain-ai [package].executor": "Run",
-    "Maven.langchain-ai [validate].executor": "Run",
-    "Maven.rag-miluvs [clean].executor": "Run",
-    "Maven.rag-miluvs [compile].executor": "Run",
-    "Maven.rag-service [clean].executor": "Run",
-    "Maven.rag-service [compile].executor": "Run",
-    "Maven.rag-service [install].executor": "Run",
-    "Maven.rag-service [package].executor": "Run",
-    "Maven.service [clean].executor": "Run",
-    "Maven.service [compile].executor": "Run",
-    "Maven.service [install].executor": "Run",
-    "Maven.service [package].executor": "Run",
-    "Maven.service [validate].executor": "Run",
-    "Maven.service [verify].executor": "Run",
-    "Maven.spring-admin-service [clean].executor": "Run",
-    "Maven.spring-admin-service [compile].executor": "Run",
-    "Maven.spring-admin-service [package].executor": "Run",
-    "Maven.spring-ai-mcp-client [clean].executor": "Run",
-    "Maven.spring-ai-mcp-client [compile].executor": "Run",
-    "Maven.spring-ai-mcp-client [validate].executor": "Run",
-    "Maven.spring-ai-mcp-server [clean].executor": "Run",
-    "Maven.spring-ai-mcp-server [compile].executor": "Run",
-    "Maven.spring-ai-mcp-server [validate].executor": "Run",
-    "Maven.spring-ai-model [clean].executor": "Run",
-    "Maven.spring-ai-model [compile].executor": "Run",
-    "Maven.spring-ai-model [install].executor": "Run",
-    "Maven.spring-ai-model [verify].executor": "Run",
-    "Maven.spring-ai-service [clean].executor": "Run",
-    "Maven.spring-ai-service [compile].executor": "Run",
-    "Maven.spring-ai-service [package].executor": "Run",
-    "Maven.spring-ai-service [validate].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Spring Boot.DemoApplication.executor": "Run",
-    "Spring Boot.FunctionApplication.executor": "Debug",
-    "Spring Boot.LangchainAiApplication.executor": "Run",
-    "Spring Boot.RagMiluvsApplication.executor": "Run",
-    "Spring Boot.RagServiceApplication.executor": "Run",
-    "Spring Boot.SpringAdminClientApplication.executor": "Run",
-    "Spring Boot.SpringAdminServiceApplication.executor": "Run",
-    "Spring Boot.SpringAiMcpApplication.executor": "Run",
-    "Spring Boot.SpringAiMcpServerApplication.executor": "Run",
-    "Spring Boot.SpringAiModelApplication.executor": "Run",
-    "Spring Boot.SpringAiServiceApplication.executor": "Run",
-    "deletionFromPopupRequiresConfirmation": "false",
-    "git-widget-placeholder": "master",
-    "jdk.selected.JAVA_MODULE": "21",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/github/system",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "MavenSettings",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AIModeration.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ChatController.executor&quot;: &quot;Run&quot;,
+    &quot;Application.HelloAI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.StramAi.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.demo [org.apache.maven.plugins:maven-clean-plugin:3.4.1:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.demo [org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.demo [org.apache.maven.plugins:maven-install-plugin:3.1.3:help].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.demo [org.apache.maven.plugins:maven-install-plugin:3.1.3:install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.function [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.function [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.function [verify].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.langchain-ai [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.langchain-ai [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.langchain-ai [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.langchain-ai [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.langchain-ai [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-miluvs [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-miluvs [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-service [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.rag-service [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.service [verify].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-admin-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-admin-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-admin-service [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-client [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-client [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-client [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-server [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-server [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-mcp-server [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-model [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-model [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-model [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-model [verify].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-service [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-service [package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.spring-ai-service [validate].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DemoApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FunctionApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.LangchainAiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.RagMiluvsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.RagServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAdminClientApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAdminServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAiMcpApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAiMcpServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAiModelApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SpringAiServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/github/rag-service&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\github\rag-service\doc" />
       <recent name="D:\workspace\service\rag-service\src\main\resources" />
     </key>
   </component>
@@ -205,7 +188,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Application.StramAi">
+  <component name="RunManager" selected="Spring Boot.SpringAiMcpServerApplication">
     <configuration default="true" type="DjangoTestsConfigurationType">
       <module name="demo" />
       <option name="ENV_FILES" value="" />
@@ -476,7 +459,11 @@
       <workItem from="1762849847552" duration="3898000" />
       <workItem from="1768298874783" duration="4231000" />
       <workItem from="1768369305748" duration="10464000" />
-      <workItem from="1768381690658" duration="8188000" />
+      <workItem from="1768381690658" duration="10725000" />
+      <workItem from="1768548818034" duration="1167000" />
+      <workItem from="1769763787978" duration="834000" />
+      <workItem from="1773898288648" duration="682000" />
+      <workItem from="1778296302897" duration="6055000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />
@@ -542,7 +529,31 @@
       <option name="project" value="LOCAL" />
       <updated>1742981535574</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="整体优化">
+      <option name="closed" value="true" />
+      <created>1768471729975</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1768471729975</updated>
+    </task>
+    <task id="LOCAL-00010" summary="plantuml">
+      <option name="closed" value="true" />
+      <created>1769763885254</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1769763885254</updated>
+    </task>
+    <task id="LOCAL-00011" summary="ollamaurl">
+      <option name="closed" value="true" />
+      <created>1773898948594</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1773898948594</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -598,7 +609,10 @@
     <MESSAGE value="spring admin server" />
     <MESSAGE value="spring admin server Security" />
     <MESSAGE value="spring ai mcp" />
-    <option name="LAST_COMMIT_MESSAGE" value="spring ai mcp" />
+    <MESSAGE value="整体优化" />
+    <MESSAGE value="plantuml" />
+    <MESSAGE value="ollamaurl" />
+    <option name="LAST_COMMIT_MESSAGE" value="ollamaurl" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -635,5 +649,13 @@
         <PinnedItemInfo parentTag="org.springframework.beans.factory.support.DefaultListableBeanFactory" memberName="factoryBeanObjectCache" />
       </pinned-members>
     </pin-to-top-manager>
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
