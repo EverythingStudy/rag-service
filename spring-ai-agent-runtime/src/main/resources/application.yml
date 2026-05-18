@@ -1,0 +1,85 @@
+server:
+  port: 8099
+  
+
+spring:
+  application:
+    path: /
+    name: spring-ai-agent-runtime
+
+  ai:
+    # DeepSeek (兼容 OpenAI API 协议，仅用于 chat)
+    openai:
+      api-key: ${DEEPSEEK_API_KEY:sk-c1a9631ef9554516b83f03904b4cec49}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: ${AI_CHAT_MODEL:deepseek-chat}
+      embedding:
+        enabled: false   # DeepSeek 无 embedding API，由 Ollama 本地模型替代
+
+    # Ollama (本地 embedding 模型)
+    ollama:
+      base-url: ${OLLAMA_URL:http://localhost:11434}
+      chat:
+        enabled: false   # 只用 Ollama 做 embedding，chat 走 DeepSeek
+      embedding:
+        options:
+          model: ${AI_EMBEDDING_MODEL:llama3}
+
+    # ──────────────────────────────
+    # MCP Client — connects to external MCP servers (MySQL, Redis, PostgreSQL)
+    # Each MCP server exposes database operations as AI-callable tools.
+    # Default: disabled. Set enabled: true and configure connections below.
+    # ──────────────────────────────
+    mcp:
+      client:
+        enabled: false
+        name: agent-runtime-mcp
+        version: 1.0.0
+        type: ASYNC
+        request-timeout: 30s
+        # sse:
+        #   connections:
+        #     mysql-mcp:
+        #       url: http://localhost:8082
+        #     redis-mcp:
+        #       url: http://localhost:8083
+        #     postgres-mcp:
+        #       url: http://localhost:8084
+
+    # ──────────────────────────────
+    # Vector Store — for RAG document retrieval
+    # Default: simple in-memory store; switch to chroma/milvus for production
+    # ──────────────────────────────
+    vectorstore:
+      type: ${VECTOR_STORE_TYPE:simple}
+
+# ChromaDB settings (only used when vectorstore.type=chroma)
+chroma:
+  url: ${CHROMA_URL:http://localhost:8000}
+  collection-name: agent-knowledge-base
+
+# Agent-specific settings
+agent:
+  max-retrieval-results: 5
+  retrieval-min-score: 0.5
+  system-prompt: |
+    你是一个智能AI助手，具有以下能力：
+
+    ## 工具使用
+    你可以使用MCP工具连接数据库（MySQL、Redis、PostgreSQL）执行查询和操作，也可以使用内置技能完成各种任务。
+
+    ## 知识库检索
+    你可以从知识库中检索相关信息来增强回答。当遇到不确定的问题时，主动检索相关知识。
+
+    ## 行为准则
+    1. 在操作数据库前，先确认用户意图，确保操作安全
+    2. 对于敏感操作（修改/删除数据），需二次确认
+    3. 如果无法从工具或知识库获得足够信息，坦诚告知用户
+    4. 使用中文回答，除非用户使用其他语言
+
+logging:
+  level:
+    cn.project.base.agentruntime: DEBUG
+    io.modelcontextprotocol: DEBUG

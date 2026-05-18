@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn compile *)",
+      "Bash(jar tf *)",
+      "Bash(cd /tmp)",
+      "Bash(jar xf *)",
+      "Bash(javap -p org/springframework/ai/chat/client/advisor/QuestionAnswerAdvisor.class)",
+      "Bash(javap -p org/springframework/ai/vectorstore/SearchRequest.class)",
+      "Bash(javap -p org/springframework/ai/vectorstore/VectorStore.class)",
+      "Bash(javap -p org/springframework/ai/chat/messages/AbstractMessage.class)",
+      "Bash(javap -p org/springframework/ai/chat/messages/Message.class)",
+      "Bash(javap -p org/springframework/ai/chat/model/ChatResponse.class)",
+      "Bash(javap -p org/springframework/ai/chat/model/Generation.class)",
+      "Bash(javap -p org/springframework/ai/model/Content.class)",
+      "Bash(mvn spring-boot:run -pl spring-ai-agent-runtime -am)",
+      "Bash(mvn spring-boot:run)",
+      "Bash(mvn dependency:build-classpath -Dmdep.outputFile=/dev/stdout -q)",
+      "Bash(grep -v \"^--$\")",
+      "Bash(mvn dependency:tree -pl spring-ai-agent-runtime -am)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /F /PID 65864)",
+      "Bash(mvn --version)",
+      "Bash(mvn help:effective-settings -f D:/github/rag-service/spring-ai-agent-runtime/pom.xml)"
+    ]
+  }
+}

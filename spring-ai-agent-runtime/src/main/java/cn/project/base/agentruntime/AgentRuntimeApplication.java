@@ -1,0 +1,12 @@
+package cn.project.base.agentruntime;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AgentRuntimeApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AgentRuntimeApplication.class, args);
+    }
+}

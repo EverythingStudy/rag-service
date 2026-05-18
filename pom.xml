@@ -19,6 +19,7 @@
         <module>spring-admin-service</module>
         <module>spring-ai-mcp</module>
         <module>spring-ai-mcp-server</module>
+        <module>spring-ai-agent-runtime</module>
     </modules>
 
     <properties>

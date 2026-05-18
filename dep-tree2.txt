@@ -1,0 +1,297 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:rag-service:jar:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 84, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:function:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 57, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 69, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:langchain-ai:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 71, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 83, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:rag-miluvs:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 135, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 147, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-ai-model:jar:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 71, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 83, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-ai-service:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 57, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-admin-client:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 72, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 84, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-admin-service:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 72, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 84, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-ai-mcp-client:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 66, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 78, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-ai-mcp-server:jar:0.0.1-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 87, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 99, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:spring-ai-agent-runtime:jar:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-compiler-plugin is missing. @ line 63, column 21
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 75, column 21
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for cn.project.base:service:pom:1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.springframework.boot:spring-boot-maven-plugin is missing. @ line 126, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] service                                                            [pom]
+[INFO] spring-ai-agent-runtime                                            [jar]
+[INFO] 
+[INFO] ----------------------< cn.project.base:service >-----------------------
+[INFO] Building service 1.0-SNAPSHOT                                      [1/2]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ service ---
+[INFO] cn.project.base:service:pom:1.0-SNAPSHOT
+[INFO] 
+[INFO] --------------< cn.project.base:spring-ai-agent-runtime >---------------
+[INFO] Building spring-ai-agent-runtime 1.0-SNAPSHOT                      [2/2]
+[INFO]   from spring-ai-agent-runtime\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/google/protobuf/protobuf-java/maven-metadata.xml
+Progress (1): 2.5/7.5 kBProgress (1): 7.5 kB                        Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/google/protobuf/protobuf-java/maven-metadata.xml (7.5 kB at 125 kB/s)
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/google/protobuf/protobuf-java-util/maven-metadata.xml
+Progress (1): 2.5/7.1 kBProgress (1): 7.1 kB                        Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/google/protobuf/protobuf-java-util/maven-metadata.xml (7.1 kB at 706 kB/s)
+[WARNING] The POM for com.google.protobuf:protobuf-java-util:jar:3.22.1 is invalid, transitive dependencies (if any) will not be available: 2 problems were encountered while building the effective model for com.google.protobuf:protobuf-java-util:3.22.1
+[ERROR] 'dependencies.dependency.groupId' for $com.google.protobuf:protobuf-java:jar with value '$com.google.protobuf' does not match a valid id pattern. @ 
+[ERROR] 'dependencies.dependency.version' for $com.google.protobuf:protobuf-java:jar is missing. @ 
+
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/org/bouncycastle/bcprov-jdk15on/maven-metadata.xml
+Progress (1): 1.1 kB                    Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/org/bouncycastle/bcprov-jdk15on/maven-metadata.xml (1.1 kB at 138 kB/s)
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea/maven-metadata.xml
+Progress (1): 2.7 kB                    Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea/maven-metadata.xml (2.7 kB at 339 kB/s)
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea-util/maven-metadata.xml
+Progress (1): 1.5 kB                    Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea-util/maven-metadata.xml (1.5 kB at 216 kB/s)
+Downloading from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea-rpc-util/maven-metadata.xml
+Progress (1): 533 B                   Downloaded from nexus-mirror: http://192.168.195.101:8081/repository/maven_public/com/aliyun/tea-rpc-util/maven-metadata.xml (533 B at 67 kB/s)
+[INFO] 
+[INFO] --- dependency:3.7.0:tree (default-cli) @ spring-ai-agent-runtime ---
+[INFO] cn.project.base:spring-ai-agent-runtime:jar:1.0-SNAPSHOT
+[INFO] +- org.springframework.boot:spring-boot-starter-web:jar:3.2.0:compile
+[INFO] |  +- org.springframework.boot:spring-boot-starter:jar:3.2.0:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot:jar:3.2.0:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:3.2.0:compile
+[INFO] |  |  +- org.springframework.boot:spring-boot-starter-logging:jar:3.2.0:compile
+[INFO] |  |  |  +- ch.qos.logback:logback-classic:jar:1.4.11:compile
+[INFO] |  |  |  |  \- ch.qos.logback:logback-core:jar:1.4.11:compile
+[INFO] |  |  |  +- org.apache.logging.log4j:log4j-to-slf4j:jar:2.21.1:compile
+[INFO] |  |  |  |  \- org.apache.logging.log4j:log4j-api:jar:2.21.1:compile
+[INFO] |  |  |  \- org.slf4j:jul-to-slf4j:jar:2.0.9:compile
+[INFO] |  |  +- jakarta.annotation:jakarta.annotation-api:jar:2.1.1:compile
+[INFO] |  |  \- org.yaml:snakeyaml:jar:2.2:compile
+[INFO] |  +- org.springframework.boot:spring-boot-starter-json:jar:3.2.0:compile
+[INFO] |  |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.15.3:compile
+[INFO] |  |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.15.3:compile
+[INFO] |  |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.15.3:compile
+[INFO] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.15.3:compile
+[INFO] |  |  +- com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.15.3:compile
+[INFO] |  |  \- com.fasterxml.jackson.module:jackson-module-parameter-names:jar:2.15.3:compile
+[INFO] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:3.2.0:compile
+[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:10.1.16:compile
+[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:10.1.16:compile
+[INFO] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:10.1.16:compile
+[INFO] |  +- org.springframework:spring-web:jar:6.1.1:compile
+[INFO] |  |  +- org.springframework:spring-beans:jar:6.1.1:compile
+[INFO] |  |  \- io.micrometer:micrometer-observation:jar:1.12.0:compile
+[INFO] |  |     \- io.micrometer:micrometer-commons:jar:1.12.0:compile
+[INFO] |  \- org.springframework:spring-webmvc:jar:6.1.1:compile
+[INFO] |     +- org.springframework:spring-aop:jar:6.1.1:compile
+[INFO] |     +- org.springframework:spring-context:jar:6.1.1:compile
+[INFO] |     \- org.springframework:spring-expression:jar:6.1.1:compile
+[INFO] +- org.springframework.boot:spring-boot-starter-webflux:jar:3.2.0:compile
+[INFO] |  +- org.springframework.boot:spring-boot-starter-reactor-netty:jar:3.2.0:compile
+[INFO] |  |  \- io.projectreactor.netty:reactor-netty-http:jar:1.1.13:compile
+[INFO] |  |     +- io.netty:netty-codec-http:jar:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-common:jar:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-buffer:jar:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-transport:jar:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-codec:jar:4.1.101.Final:compile
+[INFO] |  |     |  \- io.netty:netty-handler:jar:4.1.101.Final:compile
+[INFO] |  |     +- io.netty:netty-codec-http2:jar:4.1.101.Final:compile
+[INFO] |  |     +- io.netty:netty-resolver-dns:jar:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-resolver:jar:4.1.101.Final:compile
+[INFO] |  |     |  \- io.netty:netty-codec-dns:jar:4.1.101.Final:compile
+[INFO] |  |     +- io.netty:netty-resolver-dns-native-macos:jar:osx-x86_64:4.1.101.Final:compile
+[INFO] |  |     |  \- io.netty:netty-resolver-dns-classes-macos:jar:4.1.101.Final:compile
+[INFO] |  |     +- io.netty:netty-transport-native-epoll:jar:linux-x86_64:4.1.101.Final:compile
+[INFO] |  |     |  +- io.netty:netty-transport-native-unix-common:jar:4.1.101.Final:compile
+[INFO] |  |     |  \- io.netty:netty-transport-classes-epoll:jar:4.1.101.Final:compile
+[INFO] |  |     \- io.projectreactor.netty:reactor-netty-core:jar:1.1.13:compile
+[INFO] |  |        \- io.netty:netty-handler-proxy:jar:4.1.101.Final:compile
+[INFO] |  |           \- io.netty:netty-codec-socks:jar:4.1.101.Final:compile
+[INFO] |  \- org.springframework:spring-webflux:jar:6.1.1:compile
+[INFO] |     \- io.projectreactor:reactor-core:jar:3.6.0:compile
+[INFO] |        \- org.reactivestreams:reactive-streams:jar:1.0.4:compile
+[INFO] +- com.alibaba.cloud.ai:spring-ai-alibaba-starter:jar:1.0.0-M5.1:compile
+[INFO] |  \- com.alibaba.cloud.ai:spring-ai-alibaba-autoconfigure:jar:1.0.0-M5.1:compile
+[INFO] |     \- com.alibaba.cloud.ai:spring-ai-alibaba-core:jar:1.0.0-M5.1:compile
+[INFO] |        +- com.alibaba:dashscope-sdk-java:jar:2.15.1:compile
+[INFO] |        |  +- io.reactivex.rxjava2:rxjava:jar:2.2.21:compile
+[INFO] |        |  +- com.google.code.gson:gson:jar:2.10.1:compile
+[INFO] |        |  +- org.jetbrains.kotlin:kotlin-stdlib-jdk8:jar:1.9.20:compile
+[INFO] |        |  |  +- org.jetbrains.kotlin:kotlin-stdlib:jar:1.9.20:compile
+[INFO] |        |  |  |  \- org.jetbrains:annotations:jar:13.0:compile
+[INFO] |        |  |  \- org.jetbrains.kotlin:kotlin-stdlib-jdk7:jar:1.9.20:compile
+[INFO] |        |  +- com.squareup.okio:okio:jar:3.6.0:compile
+[INFO] |        |  |  \- com.squareup.okio:okio-jvm:jar:3.6.0:compile
+[INFO] |        |  |     \- org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.9.20:compile
+[INFO] |        |  +- com.squareup.okhttp3:logging-interceptor:jar:4.12.0:compile
+[INFO] |        |  \- com.squareup.okhttp3:okhttp-sse:jar:4.12.0:compile
+[INFO] |        +- org.springframework.ai:spring-ai-retry:jar:1.0.0-M5:compile
+[INFO] |        |  \- org.springframework.retry:spring-retry:jar:2.0.4:compile
+[INFO] |        +- org.springframework.ai:spring-ai-spring-boot-autoconfigure:jar:1.0.0-M5:compile
+[INFO] |        +- commons-codec:commons-codec:jar:1.16.0:compile
+[INFO] |        +- com.alibaba.nacos:nacos-client-mse-extension:jar:1.0.4:compile
+[INFO] |        |  +- com.aliyun:aliyun-java-sdk-core:jar:4.5.17:compile
+[INFO] |        |  |  +- org.apache.httpcomponents:httpclient:jar:4.5.13:compile
+[INFO] |        |  |  +- org.apache.httpcomponents:httpcore:jar:4.4.16:compile
+[INFO] |        |  |  +- commons-logging:commons-logging:jar:1.2:compile
+[INFO] |        |  |  +- javax.xml.bind:jaxb-api:jar:2.3.1:compile
+[INFO] |        |  |  |  \- javax.activation:javax.activation-api:jar:1.2.0:compile
+[INFO] |        |  |  +- org.jacoco:org.jacoco.agent:jar:runtime:0.8.6:compile
+[INFO] |        |  |  +- org.ini4j:ini4j:jar:0.5.4:compile
+[INFO] |        |  |  +- io.opentracing:opentracing-api:jar:0.33.0:compile
+[INFO] |        |  |  \- io.opentracing:opentracing-util:jar:0.33.0:compile
+[INFO] |        |  |     \- io.opentracing:opentracing-noop:jar:0.33.0:compile
+[INFO] |        |  +- com.aliyun:aliyun-java-sdk-kms:jar:2.16.3:compile
+[INFO] |        |  \- com.aliyun.kms:kms-transfer-client:jar:0.1.0:compile
+[INFO] |        |     \- com.aliyun:alibabacloud-dkms-gcs-sdk:jar:0.2.8:compile
+[INFO] |        |        +- com.aliyun:alibabacloud-dkms-gcs-openapi-util:jar:0.2.8:compile
+[INFO] |        |        +- com.aliyun:alibabacloud-dkms-gcs-openapi-credential:jar:0.2.8:compile
+[INFO] |        |        +- com.aliyun:alibabacloud-dkms-gcs-openapi:jar:0.2.8:compile
+[INFO] |        |        +- com.google.protobuf:protobuf-java:jar:4.0.0-rc-2:compile
+[INFO] |        |        \- com.google.protobuf:protobuf-java-util:jar:4.0.0-rc-2:compile
+[INFO] |        |           +- com.google.guava:guava:jar:29.0-android:compile
+[INFO] |        |           |  +- com.google.guava:failureaccess:jar:1.0.1:compile
+[INFO] |        |           |  +- com.google.guava:listenablefuture:jar:9999.0-empty-to-avoid-conflict-with-guava:compile
+[INFO] |        |           |  +- com.google.code.findbugs:jsr305:jar:3.0.2:compile
+[INFO] |        |           |  +- org.checkerframework:checker-compat-qual:jar:2.5.5:compile
+[INFO] |        |           |  \- com.google.j2objc:j2objc-annotations:jar:1.3:compile
+[INFO] |        |           \- com.google.errorprone:error_prone_annotations:jar:2.3.4:compile
+[INFO] |        +- com.alibaba.cloud:spring-alibaba-nacos-config:jar:2023.0.1.3:compile
+[INFO] |        |  \- com.alibaba.nacos:nacos-client:jar:2.4.2:compile
+[INFO] |        |     +- com.alibaba.nacos:nacos-auth-plugin:jar:2.4.2:compile
+[INFO] |        |     +- com.alibaba.nacos:nacos-encryption-plugin:jar:2.4.2:compile
+[INFO] |        |     +- com.alibaba.nacos:nacos-logback-adapter-12:jar:2.4.2:compile
+[INFO] |        |     +- com.alibaba.nacos:logback-adapter:jar:1.1.3:compile
+[INFO] |        |     +- com.alibaba.nacos:nacos-log4j2-adapter:jar:2.4.2:compile
+[INFO] |        |     +- org.apache.httpcomponents:httpasyncclient:jar:4.1.5:compile
+[INFO] |        |     |  \- org.apache.httpcomponents:httpcore-nio:jar:4.4.16:compile
+[INFO] |        |     \- io.prometheus:simpleclient:jar:0.16.0:compile
+[INFO] |        |        +- io.prometheus:simpleclient_tracer_otel:jar:0.16.0:compile
+[INFO] |        |        |  \- io.prometheus:simpleclient_tracer_common:jar:0.16.0:compile
+[INFO] |        |        \- io.prometheus:simpleclient_tracer_otel_agent:jar:0.16.0:compile
+[INFO] |        +- com.squareup.okhttp3:okhttp:jar:4.12.0:compile
+[INFO] |        +- com.aliyun:gpdb20160503:jar:3.0.0:compile
+[INFO] |        |  +- com.aliyun:tea-util:jar:0.2.23:compile
+[INFO] |        |  +- com.aliyun:tea-openapi:jar:0.3.6:compile
+[INFO] |        |  |  +- com.aliyun:credentials-java:jar:0.3.10:compile
+[INFO] |        |  |  |  +- com.sun.xml.bind:jaxb-core:jar:4.0.4:compile
+[INFO] |        |  |  |  |  \- org.eclipse.angus:angus-activation:jar:2.0.1:runtime
+[INFO] |        |  |  |  \- com.sun.xml.bind:jaxb-impl:jar:4.0.4:compile
+[INFO] |        |  |  +- com.aliyun:alibabacloud-gateway-spi:jar:0.0.2:compile
+[INFO] |        |  |  \- com.aliyun:tea-xml:jar:0.1.6:compile
+[INFO] |        |  +- com.aliyun:endpoint-util:jar:0.0.7:compile
+[INFO] |        |  +- com.aliyun:tea:jar:1.2.9:compile
+[INFO] |        |  +- com.aliyun:openapiutil:jar:0.2.1:compile
+[INFO] |        |  |  \- org.bouncycastle:bcpkix-jdk15on:jar:1.70:compile
+[INFO] |        |  |     \- org.bouncycastle:bcutil-jdk15on:jar:1.70:compile
+[INFO] |        |  +- com.aliyun:oss-client:jar:3.0.3:compile
+[INFO] |        |  |  \- com.aliyun:tea-rpc-util:jar:0.1.3:compile
+[INFO] |        |  +- com.aliyun:openplatform20191219:jar:5.0.1:compile
+[INFO] |        |  |  \- com.aliyun:tea-rpc:jar:0.1.2:compile
+[INFO] |        |  +- com.aliyun:oss-util:jar:1.0.2:compile
+[INFO] |        |  |  \- org.dom4j:dom4j:jar:2.1.3:compile
+[INFO] |        |  \- com.aliyun:tea-fileform:jar:0.0.3:compile
+[INFO] |        +- com.aliyun:aliyun-sdk-ha3engine-vector:jar:1.1.8:compile
+[INFO] |        |  +- com.aliyun:darabonba-string:jar:0.0.5:compile
+[INFO] |        |  +- com.aliyun:darabonba-encode-util:jar:0.0.2:compile
+[INFO] |        |  |  \- org.bouncycastle:bcprov-jdk15on:jar:1.68:compile
+[INFO] |        |  \- com.aliyun:darabonba-map:jar:0.0.1:compile
+[INFO] |        +- com.alibaba:fastjson:jar:1.2.75:compile
+[INFO] |        \- org.apache.opennlp:opennlp-tools:jar:2.3.3:compile
+[INFO] +- org.springframework.ai:spring-ai-mcp-client-webflux-spring-boot-starter:jar:1.0.0-M6:compile
+[INFO] |  +- org.springframework.ai:spring-ai-mcp-client-spring-boot-autoconfigure:jar:1.0.0-M6:compile
+[INFO] |  +- org.springframework.ai:spring-ai-mcp:jar:1.0.0-M6:compile
+[INFO] |  |  +- io.modelcontextprotocol.sdk:mcp:jar:0.7.0:compile
+[INFO] |  |  \- org.springframework.ai:spring-ai-core:jar:1.0.0-M6:compile
+[INFO] |  |     +- com.fasterxml.jackson.module:jackson-module-jsonSchema:jar:2.15.3:compile
+[INFO] |  |     |  \- javax.validation:validation-api:jar:1.1.0.Final:compile
+[INFO] |  |     +- io.swagger.core.v3:swagger-annotations:jar:2.2.25:compile
+[INFO] |  |     +- com.github.victools:jsonschema-module-swagger-2:jar:4.37.0:compile
+[INFO] |  |     +- org.antlr:ST4:jar:4.3.4:compile
+[INFO] |  |     |  \- org.antlr:antlr-runtime:jar:3.5.3:compile
+[INFO] |  |     +- org.antlr:antlr4-runtime:jar:4.13.1:compile
+[INFO] |  |     +- org.springframework:spring-messaging:jar:6.1.1:compile
+[INFO] |  |     +- io.micrometer:micrometer-core:jar:1.12.0:compile
+[INFO] |  |     |  +- org.hdrhistogram:HdrHistogram:jar:2.1.12:runtime
+[INFO] |  |     |  \- org.latencyutils:LatencyUtils:jar:2.0.3:runtime
+[INFO] |  |     +- io.micrometer:context-propagation:jar:1.1.2:compile
+[INFO] |  |     +- com.knuddels:jtokkit:jar:1.1.0:compile
+[INFO] |  |     +- com.github.victools:jsonschema-generator:jar:4.37.0:compile
+[INFO] |  |     |  \- com.fasterxml:classmate:jar:1.6.0:compile
+[INFO] |  |     \- com.github.victools:jsonschema-module-jackson:jar:4.37.0:compile
+[INFO] |  \- io.modelcontextprotocol.sdk:mcp-spring-webflux:jar:0.7.0:compile
+[INFO] +- org.projectlombok:lombok:jar:1.18.30:compile (optional)
+[INFO] \- org.springframework.boot:spring-boot-starter-test:jar:3.2.0:test
+[INFO]    +- org.springframework.boot:spring-boot-test:jar:3.2.0:test
+[INFO]    +- org.springframework.boot:spring-boot-test-autoconfigure:jar:3.2.0:test
+[INFO]    +- com.jayway.jsonpath:json-path:jar:2.8.0:test
+[INFO]    |  \- org.slf4j:slf4j-api:jar:2.0.9:compile
+[INFO]    +- jakarta.xml.bind:jakarta.xml.bind-api:jar:4.0.1:compile
+[INFO]    |  \- jakarta.activation:jakarta.activation-api:jar:2.1.2:compile
+[INFO]    +- net.minidev:json-smart:jar:2.5.0:test
+[INFO]    |  \- net.minidev:accessors-smart:jar:2.5.0:test
+[INFO]    |     \- org.ow2.asm:asm:jar:9.3:test
+[INFO]    +- org.assertj:assertj-core:jar:3.24.2:test
+[INFO]    |  \- net.bytebuddy:byte-buddy:jar:1.14.10:test
+[INFO]    +- org.awaitility:awaitility:jar:4.2.0:test
+[INFO]    +- org.hamcrest:hamcrest:jar:2.2:test
+[INFO]    +- org.junit.jupiter:junit-jupiter:jar:5.10.1:test
+[INFO]    |  +- org.junit.jupiter:junit-jupiter-api:jar:5.10.1:test
+[INFO]    |  |  +- org.opentest4j:opentest4j:jar:1.3.0:test
+[INFO]    |  |  +- org.junit.platform:junit-platform-commons:jar:1.10.1:test
+[INFO]    |  |  \- org.apiguardian:apiguardian-api:jar:1.1.2:test
+[INFO]    |  +- org.junit.jupiter:junit-jupiter-params:jar:5.10.1:test
+[INFO]    |  \- org.junit.jupiter:junit-jupiter-engine:jar:5.10.1:test
+[INFO]    |     \- org.junit.platform:junit-platform-engine:jar:1.10.1:test
+[INFO]    +- org.mockito:mockito-core:jar:5.7.0:test
+[INFO]    |  +- net.bytebuddy:byte-buddy-agent:jar:1.14.10:test
+[INFO]    |  \- org.objenesis:objenesis:jar:3.3:test
+[INFO]    +- org.mockito:mockito-junit-jupiter:jar:5.7.0:test
+[INFO]    +- org.skyscreamer:jsonassert:jar:1.5.1:test
+[INFO]    |  \- com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:test
+[INFO]    +- org.springframework:spring-core:jar:6.1.1:compile
+[INFO]    |  \- org.springframework:spring-jcl:jar:6.1.1:compile
+[INFO]    +- org.springframework:spring-test:jar:6.1.1:test
+[INFO]    \- org.xmlunit:xmlunit-core:jar:2.9.1:test
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for service 1.0-SNAPSHOT:
+[INFO] 
+[INFO] service ............................................ SUCCESS [  0.840 s]
+[INFO] spring-ai-agent-runtime ............................ SUCCESS [  1.363 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.610 s
+[INFO] Finished at: 2026-05-18T14:44:16+08:00
+[INFO] ------------------------------------------------------------------------
