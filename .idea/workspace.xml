@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="34b329d4-4b69-4d0c-8796-c32da80f9712" name="Changes" comment="ollamaurl">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +156,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;21&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/github/rag-service&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/workspace/aitd/bd.java.aitd.business&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -463,7 +463,10 @@
       <workItem from="1768548818034" duration="1167000" />
       <workItem from="1769763787978" duration="834000" />
       <workItem from="1773898288648" duration="682000" />
-      <workItem from="1778296302897" duration="6055000" />
+      <workItem from="1778296302897" duration="9722000" />
+      <workItem from="1778578711260" duration="4807000" />
+      <workItem from="1778640276684" duration="2522000" />
+      <workItem from="1778655242604" duration="1566000" />
     </task>
     <task id="LOCAL-00001" summary="github init">
       <option name="closed" value="true" />

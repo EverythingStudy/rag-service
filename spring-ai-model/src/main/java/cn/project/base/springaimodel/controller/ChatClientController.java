@@ -1,7 +1,6 @@
 package cn.project.base.springaimodel.controller;
 
 import cn.project.base.springaimodel.domain.Template;
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatOptions;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

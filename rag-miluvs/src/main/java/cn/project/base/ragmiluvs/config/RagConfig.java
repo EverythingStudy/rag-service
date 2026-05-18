@@ -29,7 +29,7 @@ public class RagConfig {
     }
 
     @Bean
-    public EmbeddingStore createEmbeddingStore() {
+    public EmbeddingStore<?> createEmbeddingStore() {
 
         log.info("==========开始创建Milvus的Collection");
         MilvusEmbeddingStore store = MilvusEmbeddingStore.builder()
