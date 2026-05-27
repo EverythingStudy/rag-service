@@ -1,0 +1,37 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: mysql-mcp-server
+  ai:
+    mcp:
+      server:
+        name: mysql-mcp-server
+        version: 1.0.0
+
+# ── 多数据源配置 ─────────────────────────────────────────────────
+# 每个子项对应一个独立 HikariCP 连接池，key 是数据源名称。
+# @Tool 方法通过 datasource 参数选择目标库（默认 "default"）。
+mysql-mcp-server:
+  datasources:
+    default:
+      url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf-8
+      username: ${MYSQL_USER:root}
+      password: ${MYSQL_PASSWORD:}
+      pool:
+        maximum-pool-size: 10
+        minimum-idle: 2
+        connection-timeout: 10000
+        max-lifetime: 1800000
+        idle-timeout: 600000
+        validation-timeout: 3000
+        leak-detection-threshold: 60000
+    # 示例：第二个数据源（取消注释即可启用）
+    # analytics:
+    #   url: jdbc:mysql://${ANALYTICS_HOST:localhost}:${ANALYTICS_PORT:3306}/${ANALYTICS_DATABASE:}?useSSL=false
+    #   username: ${ANALYTICS_USER:root}
+    #   password: ${ANALYTICS_PASSWORD:}
+    #   pool:
+    #     maximum-pool-size: 5
+    #     minimum-idle: 1

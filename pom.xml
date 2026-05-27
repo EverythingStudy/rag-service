@@ -21,6 +21,7 @@
         <module>spring-ai-mcp-server</module>
         <module>spring-ai-agent-runtime</module>
         <module>rag-pgvector</module>
+        <module>mysql-mcp-server</module>
     </modules>
 
     <properties>

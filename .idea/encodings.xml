@@ -7,8 +7,12 @@
     <file url="file://$PROJECT_DIR$/function/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/langchain-ai/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/langchain-ai/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mysql-mcp-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mysql-mcp-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rag-miluvs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rag-miluvs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rag-pgvector/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rag-pgvector/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rag-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rag-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rag/src/main/java" charset="UTF-8" />
@@ -17,6 +21,8 @@
     <file url="file://$PROJECT_DIR$/spring-admin-client/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-admin-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-admin-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-ai-agent-runtime/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-ai-agent-runtime/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-ai-mcp-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-ai-mcp-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring-ai-mcp/src/main/java" charset="UTF-8" />

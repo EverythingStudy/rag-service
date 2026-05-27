@@ -31,7 +31,8 @@
       "Bash(mvn spring-boot:run -Dspring-boot.run.profiles=default)",
       "Read(//d/maven/**)",
       "Read(//c/Users/admin/.m2/**)",
-      "Bash(mvn help:effective-settings)"
+      "Bash(mvn help:effective-settings)",
+      "Bash(pip3 list *)"
     ]
   }
 }
