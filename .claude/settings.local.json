@@ -21,7 +21,17 @@
       "Bash(netstat -ano)",
       "Bash(taskkill /F /PID 65864)",
       "Bash(mvn --version)",
-      "Bash(mvn help:effective-settings -f D:/github/rag-service/spring-ai-agent-runtime/pom.xml)"
+      "Bash(mvn help:effective-settings -f D:/github/rag-service/spring-ai-agent-runtime/pom.xml)",
+      "Bash(mvn test-compile *)",
+      "Bash(mvn dependency:tree -pl rag-pgvector)",
+      "Bash(mvn test *)",
+      "Bash(java -version)",
+      "Bash(mvn -version)",
+      "Bash(mvn spring-boot:run -pl rag-pgvector)",
+      "Bash(mvn spring-boot:run -Dspring-boot.run.profiles=default)",
+      "Read(//d/maven/**)",
+      "Read(//c/Users/admin/.m2/**)",
+      "Bash(mvn help:effective-settings)"
     ]
   }
 }

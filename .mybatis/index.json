@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "timestamp": 1779871997298,
+  "projectRoot": "d:\\github\\rag-service",
+  "entries": [
+    {
+      "path": "spring-ai-service\\target\\classes\\cn\\project\\base\\springaiservice\\SpringAiServiceApplication.class",
+      "mtime": 1779847906626.433,
+      "size": 766
+    },
+    {
+      "path": "spring-ai-agent-runtime\\target\\classes\\cn\\project\\base\\agentruntime\\AgentRuntimeApplication.class",
+      "mtime": 1779851020324.851,
+      "size": 751
+    },
+    {
+      "path": "rag-pgvector\\target\\classes\\cn\\project\\base\\ragpgvector\\RagPgVectorApplication.class",
+      "mtime": 1779871141768.119,
+      "size": 746
+    },
+    {
+      "path": "rag-pgvector\\target\\classes\\cn\\project\\base\\ragpgvector\\config\\RagPgConfig.class",
+      "mtime": 1779871141782.256,
+      "size": 2213
+    }
+  ]
+}

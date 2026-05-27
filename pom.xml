@@ -20,6 +20,7 @@
         <module>spring-ai-mcp</module>
         <module>spring-ai-mcp-server</module>
         <module>spring-ai-agent-runtime</module>
+        <module>rag-pgvector</module>
     </modules>
 
     <properties>

@@ -1,0 +1,58 @@
+server:
+  port: 8099
+
+spring:
+  application:
+    name: rag-pgvector
+
+  # PostgreSQL datasource (requires pgvector extension)
+  datasource:
+    url: ${PGVECTOR_URL:jdbc:postgresql://localhost:5432/ragdb}
+    username: ${PGVECTOR_USERNAME:postgres}
+    password: ${PGVECTOR_PASSWORD:st20240807}
+    driver-class-name: org.postgresql.Driver
+
+  ai:
+    # DeepSeek LLM via OpenAI-compatible API
+    openai:
+      api-key: ${DEEPSEEK_API_KEY:sk-b353c98299e94f1491c848436c9e2aa5}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: ${DEEPSEEK_MODEL:deepseek-v4-flash}
+      embedding:
+        enabled: false  # DeepSeek has no embedding API, use DashScope instead
+
+    # DashScope (阿里通义千问) — 仅用于 embedding，chat 走 DeepSeek
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:sk-7d8637e8c1b34e7aa901dade275a1c7b}
+      base-url: https://dashscope.aliyuncs.com
+      chat:
+        enabled: false
+      embedding:
+        enabled: true
+        options:
+          model: ${DASHSCOPE_EMBEDDING_MODEL:text-embedding-v2}
+
+    # PgVectorStore configuration
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimension: 1536    # text-embedding-v2 output dimensions
+        initialize-schema: true  # auto-create vector extension and table
+
+# RAG ingestion settings
+rag:
+  ingestion:
+    chunk:
+      max-size: 500       # max characters per chunk
+      overlap: 50         # character overlap between chunks
+    batch:
+      size: 50            # documents per batch for vector store insert
+    parallel: true        # enable parallel document processing
+    threads: 4            # thread pool size for parallel processing
+
+logging:
+  level:
+    cn.project.base.ragpgvector: DEBUG
