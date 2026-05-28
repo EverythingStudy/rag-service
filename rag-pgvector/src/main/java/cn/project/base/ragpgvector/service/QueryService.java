@@ -74,7 +74,7 @@ public class QueryService {
                                 ? doc.getText().substring(0, 200) + "..."
                                 : doc.getText(),
                         (String) doc.getMetadata().getOrDefault("source", "unknown"),
-                        (double) doc.getMetadata().getOrDefault("distance", 0.0)
+                        (Float) doc.getMetadata().getOrDefault("distance", 0.0)
                 ))
                 .toList();
 

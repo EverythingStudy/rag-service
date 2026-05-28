@@ -22,7 +22,7 @@ public class QueryController {
      * Synchronous RAG query.
      * POST with JSON body: { "message": "...", "topK": 5, "minScore": 0.0 }
      */
-    @PostMapping
+    @PostMapping(value = "/rag-query")
     public ResponseEntity<QueryResponse> query(@RequestBody QueryRequest request) {
         if (request.getMessage() == null || request.getMessage().isBlank()) {
             return ResponseEntity.badRequest().build();

@@ -16,9 +16,9 @@ spring:
 mysql-mcp-server:
   datasources:
     default:
-      url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf-8
-      username: ${MYSQL_USER:root}
-      password: ${MYSQL_PASSWORD:}
+      url: jdbc:mysql://${MYSQL_HOST:192.168.52.224}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:pacmvs}?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf-8
+      username: ${MYSQL_USER:shengtong}
+      password: ${MYSQL_PASSWORD:shengtong}
       pool:
         maximum-pool-size: 10
         minimum-idle: 2

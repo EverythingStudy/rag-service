@@ -33,11 +33,11 @@ public class QueryResponse {
     public static class Reference {
         private String content;
         private String source;
-        private double score;
+        private Float score;
 
         public Reference() {}
 
-        public Reference(String content, String source, double score) {
+        public Reference(String content, String source, Float score) {
             this.content = content;
             this.source = source;
             this.score = score;
@@ -59,11 +59,11 @@ public class QueryResponse {
             this.source = source;
         }
 
-        public double getScore() {
+        public Float getScore() {
             return score;
         }
 
-        public void setScore(double score) {
+        public void setScore(Float score) {
             this.score = score;
         }
     }
