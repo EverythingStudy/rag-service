@@ -6,6 +6,7 @@ import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Bean;
  * 基于 Spring AI MCP Server WebFlux Starter，通过 HTTP/SSE 协议
  * 暴露 MySQL 数据库查询工具。支持多数据源连接池和 MyBatis 预定义查询。
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableConfigurationProperties(MysqlMcpServerProperties.class)
 public class MysqlMcpServerApplication {
 

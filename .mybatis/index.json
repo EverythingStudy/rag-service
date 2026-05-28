@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": 1779871997298,
+  "timestamp": 1779932528683,
   "projectRoot": "d:\\github\\rag-service",
   "entries": [
     {
@@ -22,6 +22,16 @@
       "path": "rag-pgvector\\target\\classes\\cn\\project\\base\\ragpgvector\\config\\RagPgConfig.class",
       "mtime": 1779871141782.256,
       "size": 2213
+    },
+    {
+      "path": "mysql-mcp-server\\target\\classes\\cn\\project\\base\\mysqlmcpserver\\config\\MysqlMcpServerProperties$DataSourceConfig.class",
+      "mtime": 1779930226717.473,
+      "size": 1836
+    },
+    {
+      "path": "mysql-mcp-server\\target\\classes\\cn\\project\\base\\mysqlmcpserver\\config\\MysqlMcpServerProperties$PoolConfig.class",
+      "mtime": 1779931898289.962,
+      "size": 2150
     }
   ]
 }

@@ -1,8 +1,6 @@
 package cn.project.base.mysqlmcpserver.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.bind.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -15,15 +13,14 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "mysql-mcp-server")
 public class MysqlMcpServerProperties {
 
-    private final Map<String, DataSourceConfig> datasources;
-
-    @ConstructorBinding
-    public MysqlMcpServerProperties(@DefaultValue("{}") Map<String, DataSourceConfig> datasources) {
-        this.datasources = new LinkedHashMap<>(datasources);
-    }
+    private Map<String, DataSourceConfig> datasources = new LinkedHashMap<>();
 
     public Map<String, DataSourceConfig> getDatasources() {
         return datasources;
+    }
+
+    public void setDatasources(Map<String, DataSourceConfig> datasources) {
+        this.datasources = datasources;
     }
 
     /**
@@ -31,26 +28,19 @@ public class MysqlMcpServerProperties {
      */
     public static class DataSourceConfig {
 
-        private final String url;
-        private final String username;
-        private final String password;
-        private final PoolConfig pool;
-
-        @ConstructorBinding
-        public DataSourceConfig(String url, String username,
-                                @DefaultValue("") String password,
-                                @DefaultValue PoolConfig pool) {
-            this.url = url;
-            this.username = username;
-            this.password = password;
-            // 如果 YAML 中未配置 pool 块，使用默认值
-            this.pool = pool != null ? pool : new PoolConfig();
-        }
+        private String url;
+        private String username;
+        private String password;
+        private PoolConfig pool = new PoolConfig();
 
         public String getUrl() { return url; }
+        public void setUrl(String url) { this.url = url; }
         public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
         public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
         public PoolConfig getPool() { return pool; }
+        public void setPool(PoolConfig pool) { this.pool = pool != null ? pool : new PoolConfig(); }
     }
 
     /**
@@ -64,9 +54,6 @@ public class MysqlMcpServerProperties {
         private long idleTimeout = 600000L;
         private long validationTimeout = 3000L;
         private long leakDetectionThreshold = 0L;
-
-        /** 默认无参构造器 */
-        public PoolConfig() {}
 
         public int getMaximumPoolSize() { return maximumPoolSize; }
         public void setMaximumPoolSize(int v) { this.maximumPoolSize = v; }
