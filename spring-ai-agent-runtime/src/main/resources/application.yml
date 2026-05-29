@@ -10,11 +10,11 @@ spring:
   ai:
     # DeepSeek (兼容 OpenAI API 协议，仅用于 chat)
     openai:
-      api-key: ${DEEPSEEK_API_KEY:sk-c1a9631ef9554516b83f03904b4cec49}
+      api-key: ${DEEPSEEK_API_KEY:sk-b353c98299e94f1491c848436c9e2aa5}
       base-url: https://api.deepseek.com
       chat:
         options:
-          model: ${AI_CHAT_MODEL:deepseek-chat}
+          model: ${DEEPSEEK_MODEL:deepseek-v4-flash}
       embedding:
         enabled: false   # DeepSeek 无 embedding API，由 Ollama 本地模型替代
 
@@ -30,23 +30,23 @@ spring:
     # ──────────────────────────────
     # MCP Client — connects to external MCP servers (MySQL, Redis, PostgreSQL)
     # Each MCP server exposes database operations as AI-callable tools.
-    # Default: disabled. Set enabled: true and configure connections below.
+    # Add new MCP server connections under sse.connections to extend agent capabilities.
     # ──────────────────────────────
     mcp:
       client:
-        enabled: false
+        enabled: true
         name: agent-runtime-mcp
         version: 1.0.0
         type: ASYNC
         request-timeout: 30s
-        # sse:
-        #   connections:
-        #     mysql-mcp:
-        #       url: http://localhost:8082
-        #     redis-mcp:
-        #       url: http://localhost:8083
-        #     postgres-mcp:
-        #       url: http://localhost:8084
+        sse:
+          connections:
+            mysql-mcp:
+              url: http://localhost:8082
+            # redis-mcp:
+            #   url: http://localhost:8083
+            # postgres-mcp:
+            #   url: http://localhost:8084
 
     # ──────────────────────────────
     # Vector Store — for RAG document retrieval

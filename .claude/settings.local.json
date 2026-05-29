@@ -32,7 +32,16 @@
       "Read(//d/maven/**)",
       "Read(//c/Users/admin/.m2/**)",
       "Bash(mvn help:effective-settings)",
-      "Bash(pip3 list *)"
+      "Bash(pip3 list *)",
+      "Bash(unzip *)",
+      "Bash(javap -c -p -classpath /c/Users/admin/.m2/repository/org/springframework/ai/spring-ai-mcp-client-spring-boot-autoconfigure/1.0.0-M6/spring-ai-mcp-client-spring-boot-autoconfigure-1.0.0-M6.jar org.springframework.ai.autoconfigure.mcp.client.configurer.McpAsyncClientConfigurer)",
+      "Bash(javap -c -p \"C:/Users/admin/.m2/repository/org/springframework/ai/spring-ai-mcp-client-spring-boot-autoconfigure/1.0.0-M6/spring-ai-mcp-client-spring-boot-autoconfigure-1.0.0-M6.jar\" org.springframework.ai.autoconfigure.mcp.client.configurer.McpAsyncClientConfigurer)",
+      "Bash(javap -verbose -cp /c/Users/admin/.m2/repository/org/springframework/ai/spring-ai-spring-boot-autoconfigure/1.0.0-M6/spring-ai-spring-boot-autoconfigure-1.0.0-M6.jar org.springframework.ai.autoconfigure.chat.model.ToolCallingAutoConfiguration)",
+      "Bash(javap *)",
+      "Bash(mvn dependency:tree -Dincludes=org.springframework.ai)",
+      "Read(//tmp/**)",
+      "Bash(javap -p 'org/springframework/ai/chat/client/ChatClient$Builder.class')",
+      "Bash(curl *)"
     ]
   }
 }
