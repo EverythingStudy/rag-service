@@ -1,12 +1,16 @@
 server:
-  port: 8099
+  port: 8098
   
 
 spring:
   application:
     path: /
     name: spring-ai-agent-runtime
-
+  datasource:
+    url: ${PGVECTOR_URL:jdbc:postgresql://localhost:5432/ragdb}
+    username: ${PGVECTOR_USERNAME:postgres}
+    password: ${PGVECTOR_PASSWORD:st20240807}
+    driver-class-name: org.postgresql.Driver
   ai:
     # DeepSeek (兼容 OpenAI API 协议，仅用于 chat)
     openai:
@@ -16,16 +20,33 @@ spring:
         options:
           model: ${DEEPSEEK_MODEL:deepseek-v4-flash}
       embedding:
-        enabled: false   # DeepSeek 无 embedding API，由 Ollama 本地模型替代
+        enabled: false   # DeepSeek 无 embedding API，由 DashScope embedding 替代
 
-    # Ollama (本地 embedding 模型)
-    ollama:
-      base-url: ${OLLAMA_URL:http://localhost:11434}
+   # DashScope (阿里通义千问) — 仅用于 embedding，chat 走 DeepSeek
+    dashscope:
+      api-key: ${DASHSCOPE_API_KEY:sk-7d8637e8c1b34e7aa901dade275a1c7b}
+      base-url: https://dashscope.aliyuncs.com
       chat:
-        enabled: false   # 只用 Ollama 做 embedding，chat 走 DeepSeek
+        enabled: false
       embedding:
+        enabled: true
         options:
-          model: ${AI_EMBEDDING_MODEL:llama3}
+          model: ${DASHSCOPE_EMBEDDING_MODEL:text-embedding-v2}
+
+    # Ollama 已移除，由 DashScope embedding + PgVectorStore 替代
+    # ollama:
+    #   chat:
+    #     enabled: false
+    #   embedding:
+    #     enabled: true
+
+    # PgVectorStore configuration
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimension: 1536    # text-embedding-v2 output dimensions
+        initialize-schema: true  # auto-create vector extension and table
 
     # ──────────────────────────────
     # MCP Client — connects to external MCP servers (MySQL, Redis, PostgreSQL)
@@ -52,8 +73,8 @@ spring:
     # Vector Store — for RAG document retrieval
     # Default: simple in-memory store; switch to chroma/milvus for production
     # ──────────────────────────────
-    vectorstore:
-      type: ${VECTOR_STORE_TYPE:simple}
+    # vectorstore:
+    #   type: ${VECTOR_STORE_TYPE:simple}
 
 # ChromaDB settings (only used when vectorstore.type=chroma)
 chroma:

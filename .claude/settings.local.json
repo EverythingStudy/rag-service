@@ -41,7 +41,13 @@
       "Bash(mvn dependency:tree -Dincludes=org.springframework.ai)",
       "Read(//tmp/**)",
       "Bash(javap -p 'org/springframework/ai/chat/client/ChatClient$Builder.class')",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Bash(npx skills *)",
+      "Bash(cp *)",
+      "Bash(npx claude *)",
+      "Bash(mvn spring-boot:run -q)",
+      "Bash(awk '{print $5}')",
+      "Bash(xargs -r kill -f)"
     ]
   }
 }

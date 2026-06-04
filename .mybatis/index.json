@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": 1780032186663,
+  "timestamp": 1780565111702,
   "projectRoot": "d:\\github\\rag-service",
   "entries": [
     {
@@ -29,24 +29,29 @@
       "size": 2150
     },
     {
-      "path": "spring-ai-agent-runtime\\target\\classes\\cn\\project\\base\\agentruntime\\config\\VectorStoreConfig.class",
-      "mtime": 1780023076136.5051,
-      "size": 1348
-    },
-    {
       "path": "spring-admin-service\\target\\classes\\cn\\project\\base\\springadminservice\\config\\SecurityConfig.class",
       "mtime": 1780025948432.7732,
       "size": 7179
     },
     {
-      "path": "spring-ai-service\\target\\classes\\cn\\project\\base\\springaiservice\\SpringAiServiceApplication.class",
-      "mtime": 1780025949041.9692,
-      "size": 766
-    },
-    {
       "path": "spring-ai-agent-runtime\\target\\classes\\cn\\project\\base\\agentruntime\\config\\AgentConfig.class",
       "mtime": 1780031958155.6357,
       "size": 4010
+    },
+    {
+      "path": "function\\target\\classes\\cn\\project\\base\\function\\FunctionApplication.class",
+      "mtime": 1780558371054.6902,
+      "size": 731
+    },
+    {
+      "path": "spring-ai-service\\target\\classes\\cn\\project\\base\\springaiservice\\SpringAiServiceApplication.class",
+      "mtime": 1780558374151.9875,
+      "size": 766
+    },
+    {
+      "path": "spring-ai-agent-runtime\\target\\classes\\cn\\project\\base\\agentruntime\\config\\VectorStoreConfig.class",
+      "mtime": 1780563968664.5273,
+      "size": 1348
     }
   ]
 }

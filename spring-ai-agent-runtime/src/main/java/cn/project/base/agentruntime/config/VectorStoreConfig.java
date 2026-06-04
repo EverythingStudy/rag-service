@@ -8,22 +8,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 向量存储配置 —— 当没有外部向量存储（Chroma / Milvus）时，
- * 使用 SimpleVectorStore（内存实现，重启后数据丢失）。
+ * 向量存储配置 —— PGVector 为主，SimpleVectorStore 为兜底。
  * <p>
- * 生产环境可替换为：
- * <ul>
- *   <li>ChromaEmbeddingStore (spring-ai-chroma-store-spring-boot-starter)</li>
- *   <li>MilvusVectorStore (spring-ai-milvus-store-spring-boot-starter)</li>
- *   <li>PgVectorStore (spring-ai-pgvector-store-spring-boot-starter)</li>
- * </ul>
+ * 当 spring-ai-pgvector-store-spring-boot-starter 在类路径上时，
+ * PgVectorStore 自动配置生效，该兜底不生效。
  */
-@Configuration
-public class VectorStoreConfig {
+// @Configuration
+// public class VectorStoreConfig {
 
-    @Bean
-    @ConditionalOnMissingBean(VectorStore.class)
-    public VectorStore simpleVectorStore(EmbeddingModel embeddingModel) {
-        return SimpleVectorStore.builder(embeddingModel).build();
-    }
-}
+//     @Bean
+//     @ConditionalOnMissingBean(VectorStore.class)
+//     public VectorStore simpleVectorStore(EmbeddingModel embeddingModel) {
+//         return SimpleVectorStore.builder(embeddingModel).build();
+//     }
+// }
