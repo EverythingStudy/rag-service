@@ -1,9 +1,11 @@
+---
+name: db-slow-query
+description: "TRIGGER when: 用户提到\"慢查询\"\"慢SQL\"\"查询慢\"\"SQL优化\"\"执行计划\"\"索引优化\"\"数据库卡\"\"查询超时\"\"SQL性能\"\"explain\"、\"response slow\"、\"query timeout\"。SKIP: 用户只是查询普通数据不需要诊断；问题涉及数据库写入优化（INSERT/UPDATE/DELETE 慢）；问题涉及数据库配置变更（需要手动执行 SQL 修改）；涉及非 MySQL 数据库。"
+---
+
 # db-slow-query — 数据库慢查询诊断
 
 分析 MySQL 慢查询的根本原因并给出优化建议。通过 `mysql-mcp-server` 提供的 MCP 工具获取数据库诊断信息。
-
-TRIGGER when: 用户提到"慢查询""慢SQL""查询慢""SQL优化""执行计划""索引优化""数据库卡""查询超时""SQL性能""explain"、"response slow"、"query timeout"
-SKIP: 用户只是查询普通数据不需要诊断；问题涉及数据库写入优化（INSERT/UPDATE/DELETE 慢）；问题涉及数据库配置变更（需要手动执行 SQL 修改）；涉及非 MySQL 数据库
 
 ---
 

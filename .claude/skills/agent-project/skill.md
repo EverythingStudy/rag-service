@@ -1,9 +1,11 @@
+---
+name: agent-project
+description: "TRIGGER when: 用户询问项目架构、模块职责、扩展方式、启动顺序、如何新增 Skill/MCP/向量库。SKIP: 用户询问具体代码实现细节、单个类的内部逻辑、业务功能开发。"
+---
+
 # agent-project — 项目架构与设计意图
 
 基于 Java + Spring AI 构建可扩展的 AI Agent 运行时，让 LLM 通过 Skill、MCP 工具、RAG 知识库等能力与外部系统交互。
-
-TRIGGER when: 用户询问项目架构、模块职责、扩展方式、启动顺序、如何新增 Skill/MCP/向量库
-SKIP: 用户询问具体代码实现细节、单个类的内部逻辑、业务功能开发
 
 ---
 
