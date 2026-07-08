@@ -7,10 +7,12 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class QueryService {
@@ -31,8 +33,29 @@ public class QueryService {
             %s
             """;
 
+    private static final String REWRITE_PROMPT = """
+            你是一个搜索优化助手。将用户的自然语言问题改写成更适合向量语义检索的形式。
+            要求：
+            1. 提取核心关键词和关键概念
+            2. 去除口语化表达和冗余
+            3. 保持原意不变
+            4. 只输出改写后的查询文本，不要多余内容
+            """;
+
     private final VectorStore vectorStore;
     private final ChatClient chatClient;
+
+    @Value("${rag.query.rewrite.enabled:true}")
+    private boolean rewriteEnabled;
+
+    @Value("${rag.query.rerank.multiplier:3}")
+    private int rerankMultiplier;
+
+    @Value("${rag.query.rerank.vector-weight:0.6}")
+    private double vectorWeight;
+
+    @Value("${rag.query.context.max-chars:8000}")
+    private int maxContextChars;
 
     public QueryService(VectorStore vectorStore, ChatClient chatClient) {
         this.vectorStore = vectorStore;
@@ -40,15 +63,22 @@ public class QueryService {
     }
 
     /**
-     * Synchronous RAG query: retrieve context -> LLM answer.
+     * Synchronous RAG query: rewrite -> retrieve -> rerank -> answer.
      */
     public QueryResponse query(String message, int topK, double minScore) {
         long start = System.currentTimeMillis();
 
-        // 1. Search vector store
-        List<Document> results = searchSimilar(message, topK, minScore);
+        // 1. Query rewriting — optimize the search query for better retrieval
+        String searchQuery = rewriteEnabled ? rewriteQuery(message) : message;
+        if (!searchQuery.equals(message)) {
+            log.debug("Query rewritten: '{}' -> '{}'", message, searchQuery);
+        }
 
-        if (results.isEmpty()) {
+        // 2. Retrieve more candidates for re-ranking
+        int searchTopK = topK * rerankMultiplier;
+        List<Document> candidates = searchSimilar(searchQuery, searchTopK, minScore);
+
+        if (candidates.isEmpty()) {
             log.warn("No relevant documents found for: {}", message);
             String fallback = chatClient.prompt()
                     .user(message)
@@ -57,43 +87,40 @@ public class QueryService {
             return new QueryResponse(fallback, List.of());
         }
 
-        // 2. Build context from retrieved documents
+        // 3. Re-rank: hybrid score (vector similarity + keyword overlap)
+        List<Document> results = rerank(searchQuery, candidates, topK);
+
+        // 4. Build compressed context
         String context = buildContext(results);
 
-        // 3. Generate answer with DeepSeek
+        // 5. Generate answer with DeepSeek
         String answer = chatClient.prompt()
                 .system(SYSTEM_PROMPT.formatted(context))
                 .user(message)
                 .call()
                 .content();
 
-        // 4. Build response with references
-        List<QueryResponse.Reference> refs = results.stream()
-                .map(doc -> new QueryResponse.Reference(
-                        doc.getText().length() > 200
-                                ? doc.getText().substring(0, 200) + "..."
-                                : doc.getText(),
-                        (String) doc.getMetadata().getOrDefault("source", "unknown"),
-                        (Float) doc.getMetadata().getOrDefault("distance", 0.0)
-                ))
-                .toList();
-
         long elapsed = System.currentTimeMillis() - start;
-        log.info("Query completed in {}ms, retrieved {} documents", elapsed, results.size());
+        log.info("Query completed in {}ms, retrieved {} documents (from {} candidates)",
+                elapsed, results.size(), candidates.size());
 
-        return new QueryResponse(answer, refs);
+        return new QueryResponse(answer, buildReferences(searchQuery, results));
     }
 
     /**
-     * Streaming RAG query: retrieve context -> stream LLM answer token by token.
+     * Streaming RAG query: rewrite -> retrieve -> rerank -> stream answer.
      */
     public Flux<String> streamQuery(String message, int topK, double minScore) {
         long start = System.currentTimeMillis();
 
-        // 1. Search vector store
-        List<Document> results = searchSimilar(message, topK, minScore);
+        // 1. Query rewriting
+        String searchQuery = rewriteEnabled ? rewriteQuery(message) : message;
 
-        if (results.isEmpty()) {
+        // 2. Retrieve more candidates
+        int searchTopK = topK * rerankMultiplier;
+        List<Document> candidates = searchSimilar(searchQuery, searchTopK, minScore);
+
+        if (candidates.isEmpty()) {
             log.warn("No relevant documents found for streaming query: {}", message);
             return chatClient.prompt()
                     .user(message)
@@ -101,18 +128,96 @@ public class QueryService {
                     .content();
         }
 
-        // 2. Build context
+        // 3. Re-rank
+        List<Document> results = rerank(searchQuery, candidates, topK);
+
+        // 4. Build compressed context
         String context = buildContext(results);
 
         long elapsed = System.currentTimeMillis() - start;
         log.info("Stream query prepared in {}ms, retrieved {} documents", elapsed, results.size());
 
-        // 3. Stream answer
+        // 5. Stream answer
         return chatClient.prompt()
                 .system(SYSTEM_PROMPT.formatted(context))
                 .user(message)
                 .stream()
                 .content();
+    }
+
+    // ==================== Optimization steps ====================
+
+    /**
+     * Rewrite user query for better vector search recall.
+     * Uses LLM to extract core keywords and remove noise.
+     */
+    private String rewriteQuery(String message) {
+        try {
+            String rewritten = chatClient.prompt()
+                    .system(REWRITE_PROMPT)
+                    .user(message)
+                    .call()
+                    .content();
+            if (rewritten == null || rewritten.isBlank()) {
+                return message;
+            }
+            return rewritten.strip();
+        } catch (Exception e) {
+            log.warn("Query rewrite failed, using original query: {}", e.getMessage());
+            return message;
+        }
+    }
+
+    /**
+     * Re-rank candidates using hybrid score (vector similarity + keyword overlap).
+     * Returns topK documents sorted by hybrid score descending.
+     */
+    private List<Document> rerank(String query, List<Document> candidates, int topK) {
+        if (candidates.size() <= topK) {
+            // No re-ranking needed, just compute scores for references
+            return candidates;
+        }
+
+        // Compute hybrid score for each candidate
+        List<Document> sorted = new ArrayList<>(candidates);
+        sorted.sort((a, b) -> {
+            double sa = computeHybridScore(query, a);
+            double sb = computeHybridScore(query, b);
+            return Double.compare(sb, sa); // descending
+        });
+
+        return sorted.subList(0, topK);
+    }
+
+    /**
+     * Hybrid score: weighted combination of vector similarity and keyword overlap.
+     */
+    private double computeHybridScore(String query, Document doc) {
+        double distance = (Float) doc.getMetadata().getOrDefault("distance", 1.0f);
+        double vectorScore = 1.0 - Math.min(distance, 1.0); // normalize to [0, 1]
+
+        double keywordScore = keywordOverlap(query, doc.getText());
+
+        return vectorWeight * vectorScore + (1.0 - vectorWeight) * keywordScore;
+    }
+
+    /**
+     * Keyword overlap: fraction of query terms appearing in the document text.
+     */
+    private double keywordOverlap(String query, String text) {
+        String[] queryTerms = query.toLowerCase().split("\\W+");
+        if (queryTerms.length == 0) return 0.0;
+
+        String textLower = text.toLowerCase();
+        long matchCount = 0;
+        for (String term : queryTerms) {
+            if (term.length() < 2) continue; // skip single chars
+            if (textLower.contains(term)) {
+                matchCount++;
+            }
+        }
+        if (matchCount == 0) return 0.0;
+        return (double) matchCount / queryTerms.length;
     }
 
     /**
@@ -127,16 +232,43 @@ public class QueryService {
     }
 
     /**
-     * Build context string from list of documents.
+     * Build compressed context string from ranked documents.
+     * Respects maxContextChars limit.
      */
     private String buildContext(List<Document> documents) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < documents.size(); i++) {
             Document doc = documents.get(i);
             String source = (String) doc.getMetadata().getOrDefault("source", "unknown");
-            sb.append("[").append(i + 1).append("] ").append("(").append(source).append("): ");
-            sb.append(doc.getText()).append("\n\n");
+            String entry = "[" + (i + 1) + "] (" + source + "): " + doc.getText() + "\n\n";
+
+            // Truncate if would exceed limit (always include at least the first)
+            if (sb.length() + entry.length() > maxContextChars && !sb.isEmpty()) {
+                log.debug("Context truncated at {} chars ({} entries)", sb.length(), i);
+                break;
+            }
+            sb.append(entry);
         }
         return sb.toString();
+    }
+
+    /**
+     * Build reference list with hybrid scores.
+     */
+    private List<QueryResponse.Reference> buildReferences(String query, List<Document> documents) {
+        List<QueryResponse.Reference> refs = new ArrayList<>(documents.size());
+        for (Document doc : documents) {
+            double hybridScore = computeHybridScore(query, doc);
+            String content = doc.getText();
+            if (content.length() > 200) {
+                content = content.substring(0, 200) + "...";
+            }
+            refs.add(new QueryResponse.Reference(
+                    content,
+                    (String) doc.getMetadata().getOrDefault("source", "unknown"),
+                    (float) hybridScore
+            ));
+        }
+        return refs;
     }
 }

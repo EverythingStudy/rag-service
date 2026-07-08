@@ -53,6 +53,16 @@ rag:
     parallel: true        # enable parallel document processing
     threads: 4            # thread pool size for parallel processing
 
+  # Query optimization
+  query:
+    rewrite:
+      enabled: true       # LLM rewrites user query for better retrieval recall
+    rerank:
+      multiplier: 3       # candidate count = topK * multiplier, then rerank
+      vector-weight: 0.6  # hybrid score: vector weight (rest is keyword overlap)
+    context:
+      max-chars: 8000     # max context length sent to LLM, truncated if exceeded
+
 logging:
   level:
     cn.project.base.ragpgvector: DEBUG

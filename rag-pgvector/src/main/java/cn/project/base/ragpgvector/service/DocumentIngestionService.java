@@ -4,21 +4,40 @@ import cn.project.base.ragpgvector.dto.IngestionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import jakarta.annotation.PostConstruct;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.io.RandomAccessReadBuffer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.xssf.eventusermodel.XSSFReader;
+import org.apache.poi.xssf.eventusermodel.XSSFSheetXMLHandler;
+import org.apache.poi.xssf.model.SharedStrings;
+import org.apache.poi.xssf.model.StylesTable;
+import org.apache.poi.xssf.usermodel.XSSFComment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -29,6 +48,7 @@ public class DocumentIngestionService {
 
     private final VectorStore vectorStore;
     private final Executor ingestionExecutor;
+    private final EmbeddingModel embeddingModel;
 
     @Value("${rag.ingestion.chunk.max-size:500}")
     private int chunkMaxSize;
@@ -36,16 +56,31 @@ public class DocumentIngestionService {
     @Value("${rag.ingestion.chunk.overlap:50}")
     private int chunkOverlap;
 
+    @Value("${rag.ingestion.chunk.topic-threshold:0.7}")
+    private double topicThreshold;
+
     @Value("${rag.ingestion.batch.size:50}")
     private int batchSize;
 
     @Value("${rag.ingestion.parallel:true}")
     private boolean parallelEnabled;
 
+    @Value("${rag.ingestion.max-concurrent:2}")
+    private int maxConcurrent;
+
+    private Semaphore concurrencySemaphore;
+
     public DocumentIngestionService(VectorStore vectorStore,
-                                    @Qualifier("ingestionExecutor") Executor ingestionExecutor) {
+                                    @Qualifier("ingestionExecutor") Executor ingestionExecutor,
+                                    EmbeddingModel embeddingModel) {
         this.vectorStore = vectorStore;
         this.ingestionExecutor = ingestionExecutor;
+        this.embeddingModel = embeddingModel;
+    }
+
+    @PostConstruct
+    public void init() {
+        this.concurrencySemaphore = new Semaphore(maxConcurrent);
     }
 
     /**
@@ -65,11 +100,10 @@ public class DocumentIngestionService {
                 String filename = resource.getFilename();
                 if (filename == null || !isSupportedFile(filename)) continue;
 
-                String content = new BufferedReader(
-                        new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))
-                        .lines()
-                        .collect(Collectors.joining("\n"));
-                files.add(new FileSource(filename, content));
+                try (InputStream is = resource.getInputStream()) {
+                    String content = extractText(filename, is);
+                    files.add(new FileSource(filename, content));
+                }
             }
 
             return processFiles(files);
@@ -88,8 +122,10 @@ public class DocumentIngestionService {
             if (filename == null || !isSupportedFile(filename)) {
                 return IngestionResult.error("Unsupported file type: " + filename);
             }
-            String content = new String(file.getBytes(), StandardCharsets.UTF_8);
-            return processFiles(List.of(new FileSource(filename, content)));
+            try (InputStream is = file.getInputStream()) {
+                String content = extractText(filename, is);
+                return processFiles(List.of(new FileSource(filename, content)));
+            }
         } catch (Exception e) {
             log.error("Failed to import uploaded file", e);
             return IngestionResult.error("Import failed: " + e.getMessage());
@@ -110,8 +146,10 @@ public class DocumentIngestionService {
                     errors.add("Unsupported file type: " + filename);
                     continue;
                 }
-                String content = new String(file.getBytes(), StandardCharsets.UTF_8);
-                fileSources.add(new FileSource(filename, content));
+                try (InputStream is = file.getInputStream()) {
+                    String content = extractText(filename, is);
+                    fileSources.add(new FileSource(filename, content));
+                }
             } catch (Exception e) {
                 errors.add("Failed to read " + file.getOriginalFilename() + ": " + e.getMessage());
             }
@@ -130,7 +168,8 @@ public class DocumentIngestionService {
 
     /**
      * Core: process multiple files — chunk, embed, store.
-     * Uses parallel processing when enabled.
+     * Flushes each file's chunks to vector store immediately (per-file release).
+     * Uses parallel processing with semaphore-based concurrency limiting.
      */
     private IngestionResult processFiles(List<FileSource> files) {
         if (files.isEmpty()) {
@@ -140,122 +179,195 @@ public class DocumentIngestionService {
         log.info("Starting ingestion for {} files", files.size());
         long startTime = System.currentTimeMillis();
 
-        // Step 1: chunk all files into documents
-        List<Document> allChunks = Collections.synchronizedList(new ArrayList<>());
         List<String> processedFiles = Collections.synchronizedList(new ArrayList<>());
         List<String> errors = Collections.synchronizedList(new ArrayList<>());
+        AtomicInteger totalChunks = new AtomicInteger(0);
 
         if (parallelEnabled && files.size() > 1) {
-            // Parallel chunking
+            // Parallel: semaphore limits concurrent file processing
             List<CompletableFuture<Void>> futures = files.stream()
                     .map(file -> CompletableFuture.runAsync(() -> {
                         try {
-                            List<Document> chunks = chunkDocument(file);
-                            allChunks.addAll(chunks);
-                            processedFiles.add(file.filename());
-                            log.debug("Chunked {} into {} segments", file.filename(), chunks.size());
-                        } catch (Exception e) {
-                            errors.add("Failed to process " + file.filename() + ": " + e.getMessage());
-                            log.error("Error chunking {}", file.filename(), e);
+                            concurrencySemaphore.acquire();
+                            try {
+                                int n = processSingleFile(file, processedFiles, errors);
+                                totalChunks.addAndGet(n);
+                            } finally {
+                                concurrencySemaphore.release();
+                            }
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            errors.add("Interrupted: " + file.filename());
                         }
                     }, ingestionExecutor))
                     .toList();
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         } else {
-            // Sequential chunking
+            // Sequential: one file at a time
             for (FileSource file : files) {
-                try {
-                    List<Document> chunks = chunkDocument(file);
-                    allChunks.addAll(chunks);
-                    processedFiles.add(file.filename());
-                    log.debug("Chunked {} into {} segments", file.filename(), chunks.size());
-                } catch (Exception e) {
-                    errors.add("Failed to process " + file.filename() + ": " + e.getMessage());
-                    log.error("Error chunking {}", file.filename(), e);
-                }
-            }
-        }
-
-        if (allChunks.isEmpty()) {
-            return IngestionResult.partial(0, processedFiles, errors.isEmpty()
-                    ? List.of("No text content extracted from files")
-                    : errors);
-        }
-
-        // Step 2: batch insert into vector store
-        log.info("Inserting {} chunks into vector store in batches of {}", allChunks.size(), batchSize);
-        AtomicInteger batchCount = new AtomicInteger(0);
-        for (int i = 0; i < allChunks.size(); i += batchSize) {
-            int end = Math.min(i + batchSize, allChunks.size());
-            List<Document> batch = allChunks.subList(i, end);
-            try {
-                vectorStore.add(batch);
-                batchCount.incrementAndGet();
-                log.debug("Inserted batch {}/{} ({} docs)", batchCount.get(),
-                        (int) Math.ceil((double) allChunks.size() / batchSize), batch.size());
-            } catch (Exception e) {
-                String msg = "Failed to insert batch " + batchCount.get() + ": " + e.getMessage();
-                log.error(msg, e);
-                errors.add(msg);
+                int n = processSingleFile(file, processedFiles, errors);
+                totalChunks.addAndGet(n);
             }
         }
 
         long elapsed = System.currentTimeMillis() - startTime;
-        log.info("Ingestion completed: {} files, {} chunks, {} batches, {}ms",
-                processedFiles.size(), allChunks.size(), batchCount.get(), elapsed);
+        log.info("Ingestion completed: {} files, {} chunks, {}ms",
+                processedFiles.size(), totalChunks.get(), elapsed);
 
         if (errors.isEmpty()) {
-            return IngestionResult.success(allChunks.size(), processedFiles);
+            return IngestionResult.success(totalChunks.get(), processedFiles);
         }
-        return IngestionResult.partial(allChunks.size(), processedFiles, errors);
+        return IngestionResult.partial(totalChunks.get(), processedFiles, errors);
     }
 
     /**
-     * Split a file into text chunks with configurable max size and overlap.
-     * Chunks respect paragraph boundaries when possible.
+     * Chunk a single file and flush chunks to vector store immediately.
+     * This avoids holding all chunks from all files in memory at once.
+     */
+    private int processSingleFile(FileSource file,
+                                  List<String> processedFiles,
+                                  List<String> errors) {
+        try {
+            List<Document> chunks = chunkDocument(file);
+            if (chunks.isEmpty()) return 0;
+
+            // Immediate flush: write this file's chunks to vector store
+            for (int i = 0; i < chunks.size(); i += batchSize) {
+                int end = Math.min(i + batchSize, chunks.size());
+                vectorStore.add(chunks.subList(i, end));
+            }
+
+            processedFiles.add(file.filename());
+            log.debug("Processed {} ({} chunks)", file.filename(), chunks.size());
+            return chunks.size();
+        } catch (Exception e) {
+            errors.add("Failed to process " + file.filename() + ": " + e.getMessage());
+            log.error("Error processing {}", file.filename(), e);
+            return 0;
+        }
+    }
+
+    /**
+     * Split a file into text chunks using dynamic window + topic drift detection.
+     *
+     * Chunk boundaries are triggered by either:
+     * 1. Topic drift — cosine similarity between current paragraph and window center < threshold
+     * 2. Size limit — adding the paragraph would exceed chunkMaxSize
+     *
+     * Paragraph embeddings are batch-computed via the configured EmbeddingModel (DashScope).
      */
     private List<Document> chunkDocument(FileSource file) {
         String text = file.content().trim();
         if (text.isBlank()) return List.of();
 
-        List<Document> chunks = new ArrayList<>();
-        String[] paragraphs = text.split("\\n\\s*\\n");
+        String[] rawParagraphs = text.split("\\n\\s*\\n");
+        List<String> paragraphs = new ArrayList<>();
+        for (String p : rawParagraphs) {
+            String trimmed = p.trim();
+            if (!trimmed.isBlank()) paragraphs.add(trimmed);
+        }
+        if (paragraphs.isEmpty()) return List.of();
 
-        StringBuilder currentChunk = new StringBuilder();
+        // Single paragraph — skip embedding call, return single chunk
+        if (paragraphs.size() == 1) {
+            return List.of(buildChunk(file.filename(), 0, paragraphs.get(0)));
+        }
+
+        // Batch compute embeddings for all paragraphs
+        List<float[]> embeddings = computeEmbeddings(paragraphs);
+
+        List<Document> chunks = new ArrayList<>();
         int chunkIndex = 0;
 
-        for (String para : paragraphs) {
-            String trimmed = para.trim();
-            if (trimmed.isBlank()) continue;
+        // Current window state
+        List<String> currentParas = new ArrayList<>();
+        currentParas.add(paragraphs.get(0));
+        float[] centerEmb = embeddings.get(0);
+        int charSize = paragraphs.get(0).length();
 
-            // If adding this paragraph exceeds max size, finalize current chunk
-            if (currentChunk.length() + trimmed.length() + 1 > chunkMaxSize && !currentChunk.isEmpty()) {
-                chunks.add(buildChunk(file.filename(), chunkIndex++, currentChunk.toString()));
+        for (int i = 1; i < paragraphs.size(); i++) {
+            String para = paragraphs.get(i);
+            float[] paraEmb = embeddings.get(i);
+            boolean shouldSplit = false;
 
-                // Apply overlap: keep last `chunkOverlap` characters from previous chunk
-                String overlap = currentChunk.length() > chunkOverlap
-                        ? currentChunk.substring(currentChunk.length() - chunkOverlap)
-                        : "";
-                currentChunk = new StringBuilder(overlap);
-                if (!overlap.isEmpty() && !trimmed.startsWith("\n")) {
-                    currentChunk.append("\n");
+            // 1. Hard limit: would exceed max chunk size
+            if (charSize + 2 + para.length() > chunkMaxSize) {
+                shouldSplit = true;
+            }
+
+            // 2. Topic drift: similarity below threshold
+            if (!shouldSplit) {
+                double sim = cosineSimilarity(centerEmb, paraEmb);
+                if (sim < topicThreshold) {
+                    shouldSplit = true;
                 }
             }
 
-            if (currentChunk.isEmpty()) {
-                currentChunk = new StringBuilder(trimmed);
+            if (shouldSplit) {
+                String chunkText = String.join("\n\n", currentParas);
+                chunks.add(buildChunk(file.filename(), chunkIndex++, chunkText));
+
+                // Overlap: carry last `chunkOverlap` characters as text prefix
+                String overlap = chunkText.length() > chunkOverlap
+                        ? chunkText.substring(chunkText.length() - chunkOverlap) + "\n\n"
+                        : "";
+
+                // Start new window with overlap prefix + current paragraph
+                currentParas = new ArrayList<>();
+                currentParas.add(overlap + para);
+
+                // Reset center to current paragraph (overlap text doesn't affect topic detection)
+                centerEmb = paraEmb;
+                charSize = overlap.length() + para.length();
             } else {
-                currentChunk.append("\n\n").append(trimmed);
+                currentParas.add(para);
+                // Update running average center
+                centerEmb = runningAverage(centerEmb, paraEmb, currentParas.size() - 1, currentParas.size());
+                charSize += 2 + para.length();
             }
         }
 
         // Final chunk
-        if (!currentChunk.isEmpty()) {
-            chunks.add(buildChunk(file.filename(), chunkIndex, currentChunk.toString()));
+        if (!currentParas.isEmpty()) {
+            chunks.add(buildChunk(file.filename(), chunkIndex, String.join("\n\n", currentParas)));
         }
 
         return chunks;
+    }
+
+    /**
+     * Batch-compute embeddings for all paragraphs in one API call.
+     */
+    private List<float[]> computeEmbeddings(List<String> texts) {
+        List<float[]> raw = embeddingModel.embed(texts);
+        List<float[]> result = new ArrayList<>(raw.size());
+        for (float[] vec : raw) {
+            result.add(vec);
+        }
+        return result;
+    }
+
+    private static double cosineSimilarity(float[] a, float[] b) {
+        double dot = 0, normA = 0, normB = 0;
+        for (int i = 0; i < a.length; i++) {
+            dot += (double) a[i] * b[i];
+            normA += (double) a[i] * a[i];
+            normB += (double) b[i] * b[i];
+        }
+        return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+
+    /**
+     * Incremental running average: newCenter = (oldCenter * oldCount + newVec) / newCount
+     */
+    private static float[] runningAverage(float[] center, float[] newVec, int oldCount, int newCount) {
+        float[] result = new float[center.length];
+        double ratio = (double) oldCount / newCount;
+        for (int i = 0; i < center.length; i++) {
+            result[i] = (float) (center[i] * ratio + newVec[i] / newCount);
+        }
+        return result;
     }
 
     private Document buildChunk(String filename, int index, String text) {
@@ -270,7 +382,93 @@ public class DocumentIngestionService {
         String lower = filename.toLowerCase();
         return lower.endsWith(".txt") || lower.endsWith(".md") || lower.endsWith(".json")
                 || lower.endsWith(".yaml") || lower.endsWith(".yml")
-                || lower.endsWith(".csv") || lower.endsWith(".html") || lower.endsWith(".xml");
+                || lower.endsWith(".csv") || lower.endsWith(".html") || lower.endsWith(".xml")
+                || lower.endsWith(".pdf") || lower.endsWith(".docx") || lower.endsWith(".xlsx");
+    }
+
+    /**
+     * Extract text content from a file based on its extension.
+     * Accepts an InputStream for streaming-compatible parsing.
+     * Supports: plain text, PDF, Word (.docx), Excel (.xlsx).
+     */
+    private String extractText(String filename, InputStream stream) throws IOException {
+        String lower = filename.toLowerCase();
+        if (lower.endsWith(".pdf")) {
+            return extractTextFromPdf(stream);
+        } else if (lower.endsWith(".docx")) {
+            return extractTextFromDocx(stream);
+        } else if (lower.endsWith(".xlsx")) {
+            return extractTextFromXlsx(stream);
+        } else {
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+
+    private String extractTextFromPdf(InputStream stream) throws IOException {
+        try (PDDocument doc = Loader.loadPDF(new RandomAccessReadBuffer(stream))) {
+            PDFTextStripper stripper = new PDFTextStripper();
+            return stripper.getText(doc);
+        }
+    }
+
+    private String extractTextFromDocx(InputStream stream) throws IOException {
+        try (XWPFDocument doc = new XWPFDocument(stream)) {
+            return doc.getParagraphs().stream()
+                    .map(p -> p.getText().trim())
+                    .filter(t -> !t.isEmpty())
+                    .collect(Collectors.joining("\n\n"));
+        }
+    }
+
+    /**
+     * Streaming SAX-based XLSX parser — avoids loading the full workbook DOM.
+     * Processes each sheet as a stream of XML events via XSSFSheetXMLHandler.
+     */
+    private String extractTextFromXlsx(InputStream stream) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try {
+            OPCPackage pkg = OPCPackage.open(stream);
+            XSSFReader reader = new XSSFReader(pkg);
+            SharedStrings sst = reader.getSharedStringsTable();
+            StylesTable styles = reader.getStylesTable();
+
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-call", true);
+            SAXParser parser = factory.newSAXParser();
+
+            XSSFSheetXMLHandler.SheetContentsHandler handler =
+                    new XSSFSheetXMLHandler.SheetContentsHandler() {
+                        @Override
+                        public void startRow(int rowNum) { }
+
+                        @Override
+                        public void endRow(int rowNum) {
+                            sb.append('\n');
+                        }
+
+                        @Override
+                        public void cell(String cellRef, String formattedValue, XSSFComment comment) {
+                            if (formattedValue != null && !formattedValue.trim().isEmpty()) {
+                                sb.append(formattedValue.trim()).append(' ');
+                            }
+                        }
+                    };
+
+            XSSFSheetXMLHandler xmlHandler = new XSSFSheetXMLHandler(
+                    styles, sst, handler, new DataFormatter(), false);
+
+            Iterator<InputStream> sheets = reader.getSheetsData();
+            while (sheets.hasNext()) {
+                try (InputStream sheetStream = sheets.next()) {
+                    parser.parse(sheetStream, xmlHandler);
+                }
+            }
+
+            pkg.close();
+        } catch (Exception e) {
+            throw new IOException("Failed to parse XLSX", e);
+        }
+        return sb.toString().trim();
     }
 
     private record FileSource(String filename, String content) {}
