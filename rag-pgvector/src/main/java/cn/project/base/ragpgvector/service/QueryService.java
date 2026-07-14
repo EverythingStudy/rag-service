@@ -10,8 +10,11 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,8 +57,11 @@ public class QueryService {
     @Value("${rag.query.rerank.vector-weight:0.6}")
     private double vectorWeight;
 
-    @Value("${rag.query.context.max-chars:8000}")
+    @Value("${rag.query.context.max-chars:4000}")
     private int maxContextChars;
+
+    @Value("${rag.query.context.max-docs:3}")
+    private int maxContextDocs;
 
     public QueryService(VectorStore vectorStore, ChatClient chatClient) {
         this.vectorStore = vectorStore;
@@ -63,58 +69,78 @@ public class QueryService {
     }
 
     /**
-     * Synchronous RAG query: rewrite -> retrieve -> rerank -> answer.
+     * Reactive RAG query: rewrite → retrieve → rerank → answer.
+     * Fully non-blocking: LLM calls use streaming, DB calls wrapped via fromCallable.
      */
-    public QueryResponse query(String message, int topK, double minScore) {
+    public Mono<QueryResponse> query(String message, int topK, double minScore) {
         long start = System.currentTimeMillis();
 
-        // 1. Query rewriting — optimize the search query for better retrieval
-        String searchQuery = rewriteEnabled ? rewriteQuery(message) : message;
-        if (!searchQuery.equals(message)) {
-            log.debug("Query rewritten: '{}' -> '{}'", message, searchQuery);
-        }
+        // 1. Query rewriting (reactive)
+        Mono<String> searchQueryMono = rewriteEnabled
+                ? rewriteQuery(message).defaultIfEmpty(message)
+                : Mono.just(message);
 
-        // 2. Retrieve more candidates for re-ranking
-        int searchTopK = topK * rerankMultiplier;
-        List<Document> candidates = searchSimilar(searchQuery, searchTopK, minScore);
+        return searchQueryMono.flatMap(searchQuery -> {
+            if (!searchQuery.equals(message)) {
+                log.debug("Query rewritten: '{}' -> '{}'", message, searchQuery);
+            }
 
-        if (candidates.isEmpty()) {
-            log.warn("No relevant documents found for: {}", message);
-            String fallback = chatClient.prompt()
-                    .user(message)
-                    .call()
-                    .content();
-            return new QueryResponse(fallback, List.of());
-        }
+            // 2. Retrieve candidates (JDBC call wrapped to avoid blocking the reactive pipeline)
+            int searchTopK = topK * rerankMultiplier;
+            Mono<List<Document>> candidatesMono = searchSimilarReactive(searchQuery, searchTopK, minScore);
 
-        // 3. Re-rank: hybrid score (vector similarity + keyword overlap)
-        List<Document> results = rerank(searchQuery, candidates, topK);
+            return candidatesMono.flatMap(candidates -> {
+                if (candidates.isEmpty()) {
+                    log.warn("No relevant documents found for: {}", message);
+                    // Fallback: stream LLM without context
+                    return chatClient.prompt()
+                            .user(message)
+                            .stream()
+                            .content()
+                            .collectList()
+                            .map(list -> {
+                                long elapsed = System.currentTimeMillis() - start;
+                                log.info("Query completed in {}ms (no context)", elapsed);
+                                return new QueryResponse(String.join("", list), List.of());
+                            });
+                }
 
-        // 4. Build compressed context
-        String context = buildContext(results);
+                // 3. Re-rank (pure CPU, no blocking)
+                List<Document> results = rerank(searchQuery, candidates, topK);
 
-        // 5. Generate answer with DeepSeek
-        String answer = chatClient.prompt()
-                .system(SYSTEM_PROMPT.formatted(context))
-                .user(message)
-                .call()
-                .content();
+                // 4. Build compressed context (pure CPU)
+                String context = buildContext(results);
+                List<QueryResponse.Reference> refs = buildReferences(searchQuery, results);
 
-        long elapsed = System.currentTimeMillis() - start;
-        log.info("Query completed in {}ms, retrieved {} documents (from {} candidates)",
-                elapsed, results.size(), candidates.size());
+                // 5. Stream answer and collect into full response
+                long elapsed = System.currentTimeMillis() - start;
+                log.info("Query prepared in {}ms, retrieved {} documents (from {} candidates)",
+                        elapsed, results.size(), candidates.size());
 
-        return new QueryResponse(answer, buildReferences(searchQuery, results));
+                return chatClient.prompt()
+                        .system(SYSTEM_PROMPT.formatted(context))
+                        .user(message)
+                        .stream()
+                        .content()
+                        .collectList()
+                        .map(list -> {
+                            long totalElapsed = System.currentTimeMillis() - start;
+                            log.info("Query completed in {}ms", totalElapsed);
+                            return new QueryResponse(String.join("", list), refs);
+                        });
+            });
+        });
     }
 
     /**
-     * Streaming RAG query: rewrite -> retrieve -> rerank -> stream answer.
+     * Streaming RAG query: rewrite → retrieve → rerank → stream answer.
      */
     public Flux<String> streamQuery(String message, int topK, double minScore) {
         long start = System.currentTimeMillis();
 
         // 1. Query rewriting
-        String searchQuery = rewriteEnabled ? rewriteQuery(message) : message;
+        String searchQuery = rewriteEnabled ? rewriteQuery(message).block() : message;
+        if (searchQuery == null) searchQuery = message;
 
         // 2. Retrieve more candidates
         int searchTopK = topK * rerankMultiplier;
@@ -145,28 +171,36 @@ public class QueryService {
                 .content();
     }
 
-    // ==================== Optimization steps ====================
+    // ==================== Reactive steps ====================
 
     /**
-     * Rewrite user query for better vector search recall.
-     * Uses LLM to extract core keywords and remove noise.
+     * Rewrite user query via LLM, returns Mono for reactive composition.
      */
-    private String rewriteQuery(String message) {
-        try {
-            String rewritten = chatClient.prompt()
-                    .system(REWRITE_PROMPT)
-                    .user(message)
-                    .call()
-                    .content();
-            if (rewritten == null || rewritten.isBlank()) {
-                return message;
-            }
-            return rewritten.strip();
-        } catch (Exception e) {
-            log.warn("Query rewrite failed, using original query: {}", e.getMessage());
-            return message;
-        }
+    private Mono<String> rewriteQuery(String message) {
+        return chatClient.prompt()
+                .system(REWRITE_PROMPT)
+                .user(message)
+                .stream()
+                .content()
+                .collectList()
+                .map(list -> String.join("", list).strip())
+                .map(rewritten -> rewritten.isBlank() ? message : rewritten)
+                .onErrorResume(e -> {
+                    log.warn("Query rewrite failed, using original query: {}", e.getMessage());
+                    return Mono.just(message);
+                });
     }
+
+    /**
+     * Reactive wrapper around blocking vector store JDBC call.
+     * Offloads to bounded-elastic scheduler to avoid blocking Netty event loop.
+     */
+    private Mono<List<Document>> searchSimilarReactive(String query, int topK, double minScore) {
+        return Mono.fromCallable(() -> searchSimilar(query, topK, minScore))
+                .subscribeOn(Schedulers.boundedElastic());
+    }
+
+    // ==================== Original blocking steps ====================
 
     /**
      * Re-rank candidates using hybrid score (vector similarity + keyword overlap).
@@ -174,16 +208,14 @@ public class QueryService {
      */
     private List<Document> rerank(String query, List<Document> candidates, int topK) {
         if (candidates.size() <= topK) {
-            // No re-ranking needed, just compute scores for references
             return candidates;
         }
 
-        // Compute hybrid score for each candidate
         List<Document> sorted = new ArrayList<>(candidates);
         sorted.sort((a, b) -> {
             double sa = computeHybridScore(query, a);
             double sb = computeHybridScore(query, b);
-            return Double.compare(sb, sa); // descending
+            return Double.compare(sb, sa);
         });
 
         return sorted.subList(0, topK);
@@ -194,10 +226,8 @@ public class QueryService {
      */
     private double computeHybridScore(String query, Document doc) {
         double distance = (Float) doc.getMetadata().getOrDefault("distance", 1.0f);
-        double vectorScore = 1.0 - Math.min(distance, 1.0); // normalize to [0, 1]
-
+        double vectorScore = 1.0 - Math.min(distance, 1.0);
         double keywordScore = keywordOverlap(query, doc.getText());
-
         return vectorWeight * vectorScore + (1.0 - vectorWeight) * keywordScore;
     }
 
@@ -211,7 +241,7 @@ public class QueryService {
         String textLower = text.toLowerCase();
         long matchCount = 0;
         for (String term : queryTerms) {
-            if (term.length() < 2) continue; // skip single chars
+            if (term.length() < 2) continue;
             if (textLower.contains(term)) {
                 matchCount++;
             }
@@ -221,7 +251,7 @@ public class QueryService {
     }
 
     /**
-     * Search vector store for similar documents.
+     * Search vector store for similar documents (blocking JDBC call).
      */
     private List<Document> searchSimilar(String message, int topK, double minScore) {
         return vectorStore.similaritySearch(SearchRequest.builder()
@@ -233,22 +263,51 @@ public class QueryService {
 
     /**
      * Build compressed context string from ranked documents.
-     * Respects maxContextChars limit.
+     * Limits doc count, allocates token budget proportionally by score.
      */
     private String buildContext(List<Document> documents) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < documents.size(); i++) {
-            Document doc = documents.get(i);
-            String source = (String) doc.getMetadata().getOrDefault("source", "unknown");
-            String entry = "[" + (i + 1) + "] (" + source + "): " + doc.getText() + "\n\n";
+        List<Document> docs = documents.size() > maxContextDocs
+                ? documents.subList(0, maxContextDocs)
+                : documents;
 
-            // Truncate if would exceed limit (always include at least the first)
-            if (sb.length() + entry.length() > maxContextChars && !sb.isEmpty()) {
-                log.debug("Context truncated at {} chars ({} entries)", sb.length(), i);
-                break;
-            }
-            sb.append(entry);
+        double totalScore = 0;
+        int[] charBudgets = new int[docs.size()];
+        int headerOverhead = docs.size() * 20;
+        int availableChars = maxContextChars - headerOverhead;
+
+        double[] weights = new double[docs.size()];
+        for (int i = 0; i < docs.size(); i++) {
+            float dist = (Float) docs.get(i).getMetadata().getOrDefault("distance", 0.5f);
+            weights[i] = 1.0 - dist;
+            totalScore += weights[i];
         }
+
+        int allocated = 0;
+        for (int i = 0; i < docs.size(); i++) {
+            if (i == docs.size() - 1) {
+                charBudgets[i] = Math.max(200, availableChars - allocated);
+            } else {
+                int budget = (int) (availableChars * (weights[i] / totalScore));
+                budget = Math.max(200, budget);
+                charBudgets[i] = budget;
+                allocated += budget;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < docs.size(); i++) {
+            Document doc = docs.get(i);
+            String source = (String) doc.getMetadata().getOrDefault("source", "unknown");
+            String text = doc.getText();
+
+            if (text.length() > charBudgets[i]) {
+                text = text.substring(0, charBudgets[i]) + "...";
+            }
+
+            sb.append("[").append(i + 1).append("] (").append(source).append("): ")
+                    .append(text).append("\n\n");
+        }
+
         return sb.toString();
     }
 

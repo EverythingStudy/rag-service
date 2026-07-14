@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": 1783061533855,
+  "timestamp": 1784015493015,
   "projectRoot": "d:\\github\\rag-service",
   "entries": [
     {
@@ -60,13 +60,13 @@
     },
     {
       "path": "rag-pgvector\\target\\classes\\cn\\project\\base\\ragpgvector\\RagPgVectorApplication.class",
-      "mtime": 1783049700464.0427,
+      "mtime": 1784015484027.8215,
       "size": 746
     },
     {
       "path": "rag-pgvector\\target\\classes\\cn\\project\\base\\ragpgvector\\config\\RagPgConfig.class",
-      "mtime": 1783061515684.8987,
-      "size": 2205
+      "mtime": 1784015487664.6616,
+      "size": 3762
     }
   ]
 }

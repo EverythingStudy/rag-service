@@ -27,6 +27,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +39,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -68,6 +71,18 @@ public class DocumentIngestionService {
     @Value("${rag.ingestion.max-concurrent:2}")
     private int maxConcurrent;
 
+    @Value("${rag.ingestion.max-file-size:104857600}")
+    private long maxFileSize;
+
+    @Value("${rag.ingestion.retry.max-attempts:3}")
+    private int retryMaxAttempts;
+
+    @Value("${rag.ingestion.retry.backoff-delay:1000}")
+    private long retryBackoffDelay;
+
+    @Value("${rag.ingestion.parse-timeout:300}")
+    private long parseTimeoutSeconds;
+
     private Semaphore concurrencySemaphore;
 
     public DocumentIngestionService(VectorStore vectorStore,
@@ -85,6 +100,7 @@ public class DocumentIngestionService {
 
     /**
      * Import all documents from a classpath directory (e.g. classpath:documents/*).
+     * Text extraction runs in the ingestion executor to avoid blocking the caller thread.
      */
     public IngestionResult importFromClasspath(String classpathPattern) {
         try {
@@ -95,18 +111,51 @@ public class DocumentIngestionService {
                 return IngestionResult.error("No documents found at: " + classpathPattern);
             }
 
-            List<FileSource> files = new ArrayList<>();
+            log.info("Starting classpath import for {} resources", resources.length);
+            long startTime = System.currentTimeMillis();
+
+            List<String> processedFiles = Collections.synchronizedList(new ArrayList<>());
+            List<String> errors = Collections.synchronizedList(new ArrayList<>());
+            AtomicInteger totalChunks = new AtomicInteger(0);
+
+            // Submit each resource as a task to ingestionExecutor:
+            // extract → chunk → embed → store all run in executor threads
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
             for (var resource : resources) {
                 String filename = resource.getFilename();
                 if (filename == null || !isSupportedFile(filename)) continue;
 
-                try (InputStream is = resource.getInputStream()) {
-                    String content = extractText(filename, is);
-                    files.add(new FileSource(filename, content));
-                }
+                futures.add(CompletableFuture.runAsync(() -> {
+                    try {
+                        concurrencySemaphore.acquire();
+                        try (InputStream is = resource.getInputStream()) {
+                            String content = extractText(filename, is);
+                            int n = processSingleFile(new FileSource(filename, content),
+                                    processedFiles, errors);
+                            totalChunks.addAndGet(n);
+                        } finally {
+                            concurrencySemaphore.release();
+                        }
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        errors.add("Interrupted: " + filename);
+                    } catch (Exception e) {
+                        errors.add("Failed to process " + filename + ": " + e.getMessage());
+                        log.error("Error processing {}", filename, e);
+                    }
+                }, ingestionExecutor));
             }
 
-            return processFiles(files);
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+            long elapsed = System.currentTimeMillis() - startTime;
+            log.info("Classpath import completed: {} files, {} chunks, {}ms",
+                    processedFiles.size(), totalChunks.get(), elapsed);
+
+            if (errors.isEmpty()) {
+                return IngestionResult.success(totalChunks.get(), processedFiles);
+            }
+            return IngestionResult.partial(totalChunks.get(), processedFiles, errors);
         } catch (Exception e) {
             log.error("Failed to import documents from classpath: {}", classpathPattern, e);
             return IngestionResult.error("Import failed: " + e.getMessage());
@@ -115,6 +164,8 @@ public class DocumentIngestionService {
 
     /**
      * Import a single uploaded file.
+     * Reads bytes in caller thread (fast), then submits extraction + chunking + embedding
+     * to the ingestion executor to avoid blocking the controller thread.
      */
     public IngestionResult importFile(MultipartFile file) {
         try {
@@ -122,10 +173,11 @@ public class DocumentIngestionService {
             if (filename == null || !isSupportedFile(filename)) {
                 return IngestionResult.error("Unsupported file type: " + filename);
             }
-            try (InputStream is = file.getInputStream()) {
-                String content = extractText(filename, is);
-                return processFiles(List.of(new FileSource(filename, content)));
+            if (file.getSize() > maxFileSize) {
+                return IngestionResult.error("File too large: " + filename + " (" + file.getSize() + " bytes, max " + maxFileSize + ")");
             }
+            byte[] rawBytes = file.getBytes();
+            return processFileBytes(filename, rawBytes);
         } catch (Exception e) {
             log.error("Failed to import uploaded file", e);
             return IngestionResult.error("Import failed: " + e.getMessage());
@@ -134,9 +186,10 @@ public class DocumentIngestionService {
 
     /**
      * Import multiple uploaded files at once.
+     * Reads bytes in caller thread, parallel processing in executor.
      */
     public IngestionResult importFiles(List<MultipartFile> files) {
-        List<FileSource> fileSources = new ArrayList<>();
+        List<FileTask> tasks = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -146,16 +199,17 @@ public class DocumentIngestionService {
                     errors.add("Unsupported file type: " + filename);
                     continue;
                 }
-                try (InputStream is = file.getInputStream()) {
-                    String content = extractText(filename, is);
-                    fileSources.add(new FileSource(filename, content));
+                if (file.getSize() > maxFileSize) {
+                    errors.add("File too large: " + filename + " (" + file.getSize() + " bytes)");
+                    continue;
                 }
+                tasks.add(new FileTask(filename, file.getBytes()));
             } catch (Exception e) {
                 errors.add("Failed to read " + file.getOriginalFilename() + ": " + e.getMessage());
             }
         }
 
-        IngestionResult result = processFiles(fileSources);
+        IngestionResult result = processFileTasks(tasks);
         if (!errors.isEmpty()) {
             List<String> allErrors = new ArrayList<>(errors);
             if (result.getErrors() != null) {
@@ -167,52 +221,93 @@ public class DocumentIngestionService {
     }
 
     /**
-     * Core: process multiple files — chunk, embed, store.
-     * Flushes each file's chunks to vector store immediately (per-file release).
-     * Uses parallel processing with semaphore-based concurrency limiting.
+     * Process a single file's bytes in the ingestion executor.
+     * extractText → chunkDocument → vectorStore.add all run in executor thread.
      */
-    private IngestionResult processFiles(List<FileSource> files) {
-        if (files.isEmpty()) {
+    private IngestionResult processFileBytes(String filename, byte[] rawBytes) {
+        List<String> processedFiles = Collections.synchronizedList(new ArrayList<>());
+        List<String> errors = Collections.synchronizedList(new ArrayList<>());
+        AtomicInteger totalChunks = new AtomicInteger(0);
+
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            try {
+                concurrencySemaphore.acquire();
+                try {
+                    String content = extractText(filename, new ByteArrayInputStream(rawBytes));
+                    int n = processSingleFile(new FileSource(filename, content),
+                            processedFiles, errors);
+                    totalChunks.addAndGet(n);
+                } finally {
+                    concurrencySemaphore.release();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Interrupted: " + filename, e);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to parse " + filename, e);
+            }
+        }, ingestionExecutor);
+
+        try {
+            future.get(parseTimeoutSeconds, TimeUnit.SECONDS);
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            errors.add("Timeout processing " + filename + " (> " + parseTimeoutSeconds + "s)");
+            log.error("Timeout processing {} (> {}s)", filename, parseTimeoutSeconds);
+        } catch (Exception e) {
+            String msg = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
+            errors.add("Failed to process " + filename + ": " + msg);
+            log.error("Error processing {}", filename, e.getCause() != null ? e.getCause() : e);
+        }
+
+        if (errors.isEmpty()) {
+            return IngestionResult.success(totalChunks.get(), processedFiles);
+        }
+        return IngestionResult.partial(totalChunks.get(), processedFiles, errors);
+    }
+
+    /**
+     * Process multiple file tasks in the ingestion executor.
+     */
+    private IngestionResult processFileTasks(List<FileTask> tasks) {
+        if (tasks.isEmpty()) {
             return IngestionResult.error("No valid files to process");
         }
 
-        log.info("Starting ingestion for {} files", files.size());
+        log.info("Starting upload ingestion for {} files", tasks.size());
         long startTime = System.currentTimeMillis();
 
         List<String> processedFiles = Collections.synchronizedList(new ArrayList<>());
         List<String> errors = Collections.synchronizedList(new ArrayList<>());
         AtomicInteger totalChunks = new AtomicInteger(0);
 
-        if (parallelEnabled && files.size() > 1) {
-            // Parallel: semaphore limits concurrent file processing
-            List<CompletableFuture<Void>> futures = files.stream()
-                    .map(file -> CompletableFuture.runAsync(() -> {
+        List<CompletableFuture<Void>> futures = tasks.stream()
+                .map(task -> CompletableFuture.runAsync(() -> {
+                    try {
+                        concurrencySemaphore.acquire();
                         try {
-                            concurrencySemaphore.acquire();
-                            try {
-                                int n = processSingleFile(file, processedFiles, errors);
-                                totalChunks.addAndGet(n);
-                            } finally {
-                                concurrencySemaphore.release();
-                            }
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            errors.add("Interrupted: " + file.filename());
+                            String content = extractText(task.filename,
+                                    new ByteArrayInputStream(task.rawBytes));
+                            int n = processSingleFile(new FileSource(task.filename, content),
+                                    processedFiles, errors);
+                            totalChunks.addAndGet(n);
+                        } finally {
+                            concurrencySemaphore.release();
                         }
-                    }, ingestionExecutor))
-                    .toList();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        errors.add("Interrupted: " + task.filename);
+                    } catch (Exception e) {
+                        errors.add("Failed to process " + task.filename + ": " + e.getMessage());
+                        log.error("Error processing {}", task.filename, e);
+                    }
+                }, ingestionExecutor))
+                .toList();
 
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        } else {
-            // Sequential: one file at a time
-            for (FileSource file : files) {
-                int n = processSingleFile(file, processedFiles, errors);
-                totalChunks.addAndGet(n);
-            }
-        }
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
         long elapsed = System.currentTimeMillis() - startTime;
-        log.info("Ingestion completed: {} files, {} chunks, {}ms",
+        log.info("Upload ingestion completed: {} files, {} chunks, {}ms",
                 processedFiles.size(), totalChunks.get(), elapsed);
 
         if (errors.isEmpty()) {
@@ -338,14 +433,35 @@ public class DocumentIngestionService {
 
     /**
      * Batch-compute embeddings for all paragraphs in one API call.
+     * Retries with exponential backoff on transient failures.
      */
     private List<float[]> computeEmbeddings(List<String> texts) {
-        List<float[]> raw = embeddingModel.embed(texts);
-        List<float[]> result = new ArrayList<>(raw.size());
-        for (float[] vec : raw) {
-            result.add(vec);
+        int attempt = 0;
+        long delay = retryBackoffDelay;
+        while (true) {
+            try {
+                List<float[]> raw = embeddingModel.embed(texts);
+                List<float[]> result = new ArrayList<>(raw.size());
+                for (float[] vec : raw) {
+                    result.add(vec);
+                }
+                return result;
+            } catch (Exception e) {
+                attempt++;
+                if (attempt >= retryMaxAttempts) {
+                    throw e;
+                }
+                log.warn("Embedding API call failed (attempt {}/{}), retrying in {}ms: {}",
+                        attempt, retryMaxAttempts, delay, e.getMessage());
+                try {
+                    Thread.sleep(delay);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Embedding retry interrupted", ie);
+                }
+                delay *= 2; // exponential backoff
+            }
         }
-        return result;
     }
 
     private static double cosineSimilarity(float[] a, float[] b) {
@@ -472,4 +588,6 @@ public class DocumentIngestionService {
     }
 
     private record FileSource(String filename, String content) {}
+
+    private record FileTask(String filename, byte[] rawBytes) {}
 }

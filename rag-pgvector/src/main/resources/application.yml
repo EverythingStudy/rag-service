@@ -5,12 +5,30 @@ spring:
   application:
     name: rag-pgvector
 
+  # Java 21 virtual threads — blocking I/O (LLM API, JDBC) no longer blocks OS threads
+  threads:
+    virtual:
+      enabled: true
+
+  # File upload limits
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+
   # PostgreSQL datasource (requires pgvector extension)
   datasource:
     url: ${PGVECTOR_URL:jdbc:postgresql://localhost:5432/ragdb}
     username: ${PGVECTOR_USERNAME:postgres}
     password: ${PGVECTOR_PASSWORD:st20240807}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 5000
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      pool-name: RagHikariCP
 
   ai:
     # DeepSeek LLM via OpenAI-compatible API
@@ -48,10 +66,17 @@ rag:
     chunk:
       max-size: 500       # max characters per chunk
       overlap: 50         # character overlap between chunks
+      topic-threshold: 0.7
     batch:
       size: 50            # documents per batch for vector store insert
     parallel: true        # enable parallel document processing
     threads: 4            # thread pool size for parallel processing
+    max-concurrent: 2     # max files processed concurrently
+    max-file-size: 104857600  # max single file size in bytes (100MB)
+    parse-timeout: 300    # max seconds per file for parse + chunk + embed
+    retry:
+      max-attempts: 3     # embedding API retry count
+      backoff-delay: 1000 # initial retry delay in ms
 
   # Query optimization
   query:
@@ -61,7 +86,8 @@ rag:
       multiplier: 3       # candidate count = topK * multiplier, then rerank
       vector-weight: 0.6  # hybrid score: vector weight (rest is keyword overlap)
     context:
-      max-chars: 8000     # max context length sent to LLM, truncated if exceeded
+      max-chars: 4000     # max context chars sent to LLM (reduced from 8000)
+      max-docs: 3         # max documents included in context (reduces token waste)
 
 logging:
   level:

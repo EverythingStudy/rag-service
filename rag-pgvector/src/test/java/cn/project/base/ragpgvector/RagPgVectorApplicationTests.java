@@ -9,11 +9,13 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.ai.autoconfigure.vectorstore.pgvector.PgVectorStoreAutoConfiguration;
+import com.alibaba.cloud.ai.autoconfigure.dashscope.DashScopeAutoConfiguration;
 
 @SpringBootTest
 @EnableAutoConfiguration(exclude = {
         PgVectorStoreAutoConfiguration.class,
-        DataSourceAutoConfiguration.class
+        DataSourceAutoConfiguration.class,
+        DashScopeAutoConfiguration.class
 })
 @MockBean(VectorStore.class)
 @MockBean(ChatModel.class)
